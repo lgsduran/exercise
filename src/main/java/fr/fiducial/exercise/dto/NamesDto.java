@@ -1,8 +1,31 @@
 package fr.fiducial.exercise.dto;
 
+import java.time.Instant;
+
 public class NamesDto {
 
-	private String name;
+	private long id;
+	private String name;	
+	private Instant created_At;
+	
+	/**
+	 * @param id
+	 * @param name
+	 * @param created_At
+	 */
+	public NamesDto(long id, String name, Instant created_At) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.created_At = created_At;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public long getId() {
+		return id;
+	}
 
 	/**
 	 * @return the name
@@ -12,15 +35,26 @@ public class NamesDto {
 	}
 
 	/**
-	 * @param name the name to set
+	 * @return the created_At
 	 */
-	public void setName(String name) {
-		this.name = name;
+	public Instant getCreated_At() {
+		return created_At;
 	}
-
-	@Override
-	public String toString() {
-		return "NamesDto [name=" + name + "]";
-	}
+	
+	/**
+	 * @see method copies the properties of source object to target object
+	 * @return names
+	 */	
+//	public Names toEntity() {
+//		var names = new Names();
+//		copyProperties(this, names);
+//		return names;
+//	}
+	
+	
+	
+	
+	
+	
 
 }

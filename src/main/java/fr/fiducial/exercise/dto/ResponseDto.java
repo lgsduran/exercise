@@ -1,11 +1,8 @@
 package fr.fiducial.exercise.dto;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
-import static org.springframework.beans.BeanUtils.copyProperties;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
-import fr.fiducial.exercise.entity.Names;
 
 public class ResponseDto {
 

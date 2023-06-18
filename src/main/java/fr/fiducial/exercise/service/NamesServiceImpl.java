@@ -1,9 +1,13 @@
 package fr.fiducial.exercise.service;
 
 import static java.lang.String.format;
+import static java.time.Instant.now;
 
+import java.lang.reflect.Method;
+import java.util.List;
 import java.util.function.Predicate;
 
+import org.aspectj.lang.annotation.Before;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,6 +29,12 @@ public class NamesServiceImpl implements INamesService {
 		this.namesRepository = namesRepository;
 	}
 	
+	@Override
+	public List<NamesDto> saveAll(List<Names> names) throws NameException {
+		names.forEach(x -> x.setCreatedAt(now()));
+		this.namesRepository.saveAll(names);
+		return null;
+	}	
 
 	/**
 	 * @see Before saving a single name, it checks whether or not it is duplicated.
@@ -32,17 +42,20 @@ public class NamesServiceImpl implements INamesService {
 	 * @exception NameException
 	 */
 	@Override
-	public void save(Names name) throws NameException {		
+	public NamesDto save(Names name) throws NameException {		
 		var duplicationResult = this.namesRepository
 				.findAll()
 				.stream()
-				.findFirst()
-				.filter(isNameDuplicated(name.getName()));
+				.anyMatch(getNamePredicate(name.getName()));
 		
-		if (duplicationResult.isPresent())
-			throw new NameException(format("Name %s duplicated", name.getName()));
+		if (duplicationResult)
+			throw new NameException(format("Name %s is duplicated", name.getName()));
 		
-		this.namesRepository.save(name);		
+		name.setCreatedAt(now());		
+		this.namesRepository.save(name);
+		
+		var dto = new NamesDto(name.getId(), name.getName(), name.getCreatedAt());
+		return dto;
 	}
 	
 	/**
@@ -61,17 +74,30 @@ public class NamesServiceImpl implements INamesService {
 	 */
 	@Override
 	public Boolean nameExists(String name) {
-		var strName = this.namesRepository.getByName(name);
 		var duplicationResult = this.namesRepository
-								.findAll()
-								.stream()
-								.findFirst()
-								.filter(isNameDuplicated(strName));
+				.findAll()
+				.stream()
+				.anyMatch(getNamePredicate(name));
 		
-		if (duplicationResult.isPresent())
+		if (duplicationResult)
 			return true;
 
 		return false;
+	}
+	
+
+	/**
+	 * @see Method deletes item by name.
+	 * @param name
+	 */
+	@Override
+	public void deleteName(String name) throws NameException {
+		var isItemFound = this.namesRepository.findByName(name);
+		
+		if (isItemFound == null)
+			throw new NameException(format("Name %s was not found.", name));			      
+
+		this.namesRepository.deleteByName(name);
 	}
 	
 	/**
@@ -79,8 +105,7 @@ public class NamesServiceImpl implements INamesService {
 	 * @param strName
 	 * @return predicate
 	 */	
-	private Predicate<Names> isNameDuplicated(String strName) {
+	private Predicate<Names> getNamePredicate(String strName) {
 	    return x -> x.getName().equalsIgnoreCase(strName);
 	}
-
 }

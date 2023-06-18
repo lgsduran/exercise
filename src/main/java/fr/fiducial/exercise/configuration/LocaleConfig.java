@@ -11,10 +11,10 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 public class LocaleConfig {
 
 	@Bean
-	public LocaleResolver localeResolver() {
+	LocaleResolver localeResolver() {
 		var slr = new SessionLocaleResolver();
 		slr.setDefaultLocale(US);
 		return slr;
 	}
-	
+
 }

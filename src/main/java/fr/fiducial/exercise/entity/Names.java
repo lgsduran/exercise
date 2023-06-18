@@ -1,13 +1,10 @@
 package fr.fiducial.exercise.entity;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
-import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE;
 
-import java.time.LocalDate;
+import java.time.Instant;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.data.annotation.CreatedDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,6 +12,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+
+/**
+ * The persistent class for the names database table. * 
+ */
 
 @Entity
 @Table(name = "names")
@@ -28,9 +29,10 @@ public class Names {
 	@NotBlank(message = "Field must not be null.")
 	private String name;
 
-	@DateTimeFormat(iso = DATE)
-	@JsonFormat(pattern = "dd-MM-yyyy")
-	private LocalDate data;
+	@CreatedDate
+	@Column(name = "created_At", nullable = false)
+	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+	private Instant createdAt;
 
 	/**
 	 * @return the id
@@ -58,24 +60,20 @@ public class Names {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}	
+
+	/**
+	 * @return the createdAt
+	 */
+	public Instant getCreatedAt() {
+		return createdAt;
 	}
 
 	/**
-	 * @return the data
+	 * @param createdAt the createdAt to set
 	 */
-	public LocalDate getData() {
-		return data;
+	public void setCreatedAt(Instant createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	/**
-	 * @param data the data to set
-	 */
-	public void setData(LocalDate data) {
-		this.data = data;
-	}
-
-	@Override
-	public String toString() {
-		return "Names [id=" + id + ", name=" + name + ", data=" + data + "]";
-	}
 }

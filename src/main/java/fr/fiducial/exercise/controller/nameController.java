@@ -2,6 +2,8 @@ package fr.fiducial.exercise.controller;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springdoc.api.annotations.ParameterObject;
@@ -9,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import fr.fiducial.exercise.dto.NamesDto;
 import fr.fiducial.exercise.entity.Names;
 import fr.fiducial.exercise.exception.NameException;
 import fr.fiducial.exercise.service.NamesServiceImpl;
@@ -41,10 +46,16 @@ public class nameController {
 //		this.namesServiceImpl = namesServiceImpl;
 //	}
 	
+	@PostMapping("/addNames")
+	@ResponseStatus(CREATED)
+	public List<NamesDto> addRoles(@Valid @RequestBody List<Names> names) throws NameException {
+		return this.namesServiceImpl.saveAll(names);
+	}
+	
 	@PostMapping("/addName")
 	@ResponseStatus(CREATED)
-	void addName(@Valid @RequestBody Names name) throws NameException {	
-		this.namesServiceImpl.save(name);
+	NamesDto addName(@Valid @RequestBody Names name) throws NameException {	
+		return this.namesServiceImpl.save(name);
 	}
 	
 	@GetMapping("/names")
@@ -56,6 +67,12 @@ public class nameController {
 	@GetMapping(path = "/{name}")
 	Boolean nameExists(@PathVariable String name) {
 		return this.namesServiceImpl.nameExists(name);
+	}
+	
+	@DeleteMapping(path = "/{name}")
+	@Transactional
+	public void deleteName(@PathVariable String name) throws NameException {
+		this.namesServiceImpl.deleteName(name);
 	}
 
 }
