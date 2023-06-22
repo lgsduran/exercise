@@ -75,5 +75,22 @@ public class Names {
 	public void setCreatedAt(Instant createdAt) {
 		this.createdAt = createdAt;
 	}
+	
+	public Names() {}
+
+	public Names(String name) {
+		this.name = name;
+	}
+
+	public Names(String name, Instant createdAt) {
+		this.name = name;
+		this.createdAt = createdAt;
+	}
+
+
+	
+	
+	
+	
 
 }

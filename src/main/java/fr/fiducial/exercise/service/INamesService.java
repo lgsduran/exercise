@@ -1,5 +1,6 @@
 package fr.fiducial.exercise.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -12,6 +13,8 @@ import fr.fiducial.exercise.exception.NameException;
 public interface INamesService {
 	
 	List<NamesDto> saveAll(List<Names> names) throws NameException;
+	
+	void saveAll(ArrayList<String> names) throws NameException;
 	
 	NamesDto save(Names name) throws NameException;
 	

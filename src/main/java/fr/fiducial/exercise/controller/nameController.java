@@ -2,6 +2,7 @@ package fr.fiducial.exercise.controller;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -31,7 +32,7 @@ import fr.fiducial.exercise.service.NamesServiceImpl;
 public class nameController {
 	
 	@Autowired
-	private NamesServiceImpl namesServiceImpl;	
+	private NamesServiceImpl namesServiceImpl;
 
 	/**
 	 * 
@@ -50,6 +51,20 @@ public class nameController {
 	@ResponseStatus(CREATED)
 	public List<NamesDto> addRoles(@Valid @RequestBody List<Names> names) throws NameException {
 		return this.namesServiceImpl.saveAll(names);
+	}
+	
+//	@PostMapping("/addNames2")
+//	@ResponseStatus(CREATED)
+//	public List<NamesDto> saveAll(@Valid @RequestBody ArrayList<Names> names) throws NameException {
+//		names.forEach(x -> x.setCreatedAt(now()));
+//		this.namesServiceImpl.saveAll(names);
+//		return null;
+//	}
+//	
+	@PostMapping("/addNames2")
+	@ResponseStatus(CREATED)
+	public void saveAll(@RequestBody ArrayList<String> names) throws NameException {
+		this.namesServiceImpl.saveAll(names);	
 	}
 	
 	@PostMapping("/addName")
