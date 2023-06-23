@@ -15,7 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import fr.fiducial.exercise.dto.NamesDto;
 import fr.fiducial.exercise.entity.Names;
@@ -59,7 +60,7 @@ class NamesServiceImplTest {
 
 	@Test
 	void testListNames() {
-		Page<Names> listNames = namesServiceImpl.listNames(null);
+		Page<Names> listNames = namesServiceImpl.listNames(PageRequest.of(0, 3, Sort.by("name")));
 		assertTrue(!listNames.isEmpty());
 	}
 
