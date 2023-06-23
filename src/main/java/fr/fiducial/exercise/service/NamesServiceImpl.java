@@ -94,6 +94,11 @@ public class NamesServiceImpl implements INamesService {
 	}
 
 
+	/**
+	 * @see Method persists array of names
+	 * @param names
+	 * @return
+	 */
 
 	@Override
 	public List<NamesDto> saveAll(ArrayList<Names> names) throws NameException {

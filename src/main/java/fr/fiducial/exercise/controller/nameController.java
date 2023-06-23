@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,13 +29,15 @@ import io.swagger.v3.oas.annotations.Parameter;
 @RequestMapping("/api/names")
 public class nameController {
 	
-	@Autowired
-	private NamesServiceImpl namesServiceImpl;
+
+	private final NamesServiceImpl namesServiceImpl;
 
 	/**
-	 * 
+	 * @see Constructor for dependency injection
+	 * @param namesServiceImpl
 	 */
-	public nameController() {
+	public nameController(NamesServiceImpl namesServiceImpl) {
+		this.namesServiceImpl = namesServiceImpl;
 	}
 
 	@PostMapping("/addNames")
