@@ -36,13 +36,13 @@ public class nameController {
 	 * @see Constructor for dependency injection
 	 * @param namesServiceImpl
 	 */
-	public nameController(NamesServiceImpl namesServiceImpl) {
+	nameController(NamesServiceImpl namesServiceImpl) {
 		this.namesServiceImpl = namesServiceImpl;
 	}
 
 	@PostMapping("/addNames")
 	@ResponseStatus(CREATED)
-	public List<NamesDto> saveAll(@Valid @RequestBody ArrayList<Names> names) throws NameException {
+	List<NamesDto> saveAll(@Valid @RequestBody ArrayList<Names> names) throws NameException {
 		return this.namesServiceImpl.saveAll(names);	
 	}
 	
@@ -65,7 +65,7 @@ public class nameController {
 	
 	@DeleteMapping(path = "/{name}")
 	@Transactional
-	public void deleteName(@PathVariable String name) throws NameException {
+	void deleteName(@PathVariable String name) throws NameException {
 		this.namesServiceImpl.deleteName(name);
 	}
 
