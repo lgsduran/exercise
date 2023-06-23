@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 
 @RestController
 @RequestMapping("/api/names")
-public class nameController {
+public class NameController {
 	
 
 	private final NamesServiceImpl namesServiceImpl;
@@ -36,7 +36,7 @@ public class nameController {
 	 * @see Constructor for dependency injection
 	 * @param namesServiceImpl
 	 */
-	nameController(NamesServiceImpl namesServiceImpl) {
+	NameController(NamesServiceImpl namesServiceImpl) {
 		this.namesServiceImpl = namesServiceImpl;
 	}
 
