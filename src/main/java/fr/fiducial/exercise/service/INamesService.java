@@ -12,9 +12,7 @@ import fr.fiducial.exercise.exception.NameException;
 
 public interface INamesService {
 	
-	List<NamesDto> saveAll(List<Names> names) throws NameException;
-	
-	void saveAll(ArrayList<String> names) throws NameException;
+	List<NamesDto> saveAll(ArrayList<Names> names) throws NameException;
 	
 	NamesDto save(Names name) throws NameException;
 	

@@ -31,8 +31,18 @@ public class Names {
 
 	@CreatedDate
 	@Column(name = "created_At", nullable = false)
-	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private Instant createdAt;
+	
+	public Names() {}
+
+	public Names(String name) {
+		this.name = name;
+	}
+
+	public Names(String name, Instant createdAt) {
+		this.name = name;
+		this.createdAt = createdAt;
+	}
 
 	/**
 	 * @return the id
@@ -75,22 +85,4 @@ public class Names {
 	public void setCreatedAt(Instant createdAt) {
 		this.createdAt = createdAt;
 	}
-	
-	public Names() {}
-
-	public Names(String name) {
-		this.name = name;
-	}
-
-	public Names(String name, Instant createdAt) {
-		this.name = name;
-		this.createdAt = createdAt;
-	}
-
-
-	
-	
-	
-	
-
 }

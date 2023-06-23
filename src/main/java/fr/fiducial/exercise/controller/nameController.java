@@ -7,11 +7,9 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +24,7 @@ import fr.fiducial.exercise.dto.NamesDto;
 import fr.fiducial.exercise.entity.Names;
 import fr.fiducial.exercise.exception.NameException;
 import fr.fiducial.exercise.service.NamesServiceImpl;
+import io.swagger.v3.oas.annotations.Parameter;
 
 @RestController
 @RequestMapping("/api/names")
@@ -40,31 +39,10 @@ public class nameController {
 	public nameController() {
 	}
 
-//	/**
-//	 * @param namesServiceImpl
-//	 */
-//	public nameController(NamesServiceImpl namesServiceImpl) {
-//		this.namesServiceImpl = namesServiceImpl;
-//	}
-	
 	@PostMapping("/addNames")
 	@ResponseStatus(CREATED)
-	public List<NamesDto> addRoles(@Valid @RequestBody List<Names> names) throws NameException {
-		return this.namesServiceImpl.saveAll(names);
-	}
-	
-//	@PostMapping("/addNames2")
-//	@ResponseStatus(CREATED)
-//	public List<NamesDto> saveAll(@Valid @RequestBody ArrayList<Names> names) throws NameException {
-//		names.forEach(x -> x.setCreatedAt(now()));
-//		this.namesServiceImpl.saveAll(names);
-//		return null;
-//	}
-//	
-	@PostMapping("/addNames2")
-	@ResponseStatus(CREATED)
-	public void saveAll(@RequestBody ArrayList<String> names) throws NameException {
-		this.namesServiceImpl.saveAll(names);	
+	public List<NamesDto> saveAll(@Valid @RequestBody ArrayList<Names> names) throws NameException {
+		return this.namesServiceImpl.saveAll(names);	
 	}
 	
 	@PostMapping("/addName")
@@ -73,8 +51,8 @@ public class nameController {
 		return this.namesServiceImpl.save(name);
 	}
 	
-	@GetMapping("/names")
-	Page<Names> listNames(@Valid  @ParameterObject @PageableDefault Pageable pageable) {
+	@GetMapping("/")
+	Page<Names> listNames(@Parameter(hidden = true) Pageable pageable) {
 		return this.namesServiceImpl.listNames(pageable);
 		
 	}
