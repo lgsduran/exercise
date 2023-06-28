@@ -8,11 +8,12 @@ import org.springframework.data.domain.Pageable;
 
 import fr.fiducial.exercise.dto.NamesDto;
 import fr.fiducial.exercise.entity.Names;
+import fr.fiducial.exercise.exception.DuplicatedNameException;
 import fr.fiducial.exercise.exception.NameException;
 
 public interface INamesService {
 	
-	List<NamesDto> saveAll(ArrayList<Names> names) throws NameException;
+	List<NamesDto> saveAll(ArrayList<Names> names) throws DuplicatedNameException, NameException;
 	
 	NamesDto save(Names name) throws NameException;
 	
@@ -20,6 +21,6 @@ public interface INamesService {
 	
 	Boolean nameExists(String name);
 	
-	void deleteName(String name) throws NameException;
+	void deleteByName(String name) throws NameException;
 
 }

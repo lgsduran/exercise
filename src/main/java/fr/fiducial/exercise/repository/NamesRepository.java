@@ -14,6 +14,6 @@ public interface NamesRepository extends JpaRepository<Names, Long> {
 	
 	//List<Names> findByName(String name);
 
-	void deleteByName(String name);
+	//void deleteByName(String name);
 
 }

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import fr.fiducial.exercise.dto.NamesDto;
 import fr.fiducial.exercise.entity.Names;
+import fr.fiducial.exercise.exception.DuplicatedNameException;
 import fr.fiducial.exercise.exception.NameException;
 import fr.fiducial.exercise.service.NamesServiceImpl;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -42,7 +43,7 @@ public class NameController {
 
 	@PostMapping("/addNames")
 	@ResponseStatus(CREATED)
-	List<NamesDto> saveAll(@Valid @RequestBody ArrayList<Names> names) throws NameException {
+	List<NamesDto> saveAll(@Valid @RequestBody ArrayList<Names> names) throws NameException, DuplicatedNameException {
 		return this.namesServiceImpl.saveAll(names);	
 	}
 	
@@ -66,7 +67,7 @@ public class NameController {
 	@DeleteMapping(path = "/{name}")
 	@Transactional
 	void deleteName(@PathVariable String name) throws NameException {
-		this.namesServiceImpl.deleteName(name);
+		this.namesServiceImpl.deleteByName(name);
 	}
 
 }

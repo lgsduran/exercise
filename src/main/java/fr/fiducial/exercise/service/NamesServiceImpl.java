@@ -12,9 +12,11 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import fr.fiducial.exercise.dto.NamesDto;
 import fr.fiducial.exercise.entity.Names;
+import fr.fiducial.exercise.exception.DuplicatedNameException;
 import fr.fiducial.exercise.exception.NameException;
 import fr.fiducial.exercise.repository.NamesRepository;
 import fr.fiducial.exercise.utils.PredicateUtils;
@@ -80,29 +82,32 @@ public class NamesServiceImpl implements INamesService {
 	}
 
 	/**
-	 * @see Method deletes item by name.
+	 * @see Method deletes item by its id.
 	 * @param name
+	 * @throws NameException
 	 */
 	@Override
-	public void deleteName(String name) throws NameException {
+	@Transactional
+	public void deleteByName(String name) throws NameException {
 		String nameStr = name.toLowerCase();
 		var isItemFound = this.namesRepository.findByName(nameStr);
 
 		if (isItemFound == null)
 			throw new NameException(format("Name %s was not found.", nameStr));
 
-		this.namesRepository.deleteByName(nameStr);
+		this.namesRepository.deleteById(isItemFound.getId());
 	}
 
 
 	/**
 	 * @see Method persists array of names
 	 * @param names
-	 * @return
+	 * @return List<NamesDto>
+	 * @throws NameException, DuplicatedNameException 
 	 */
 
 	@Override
-	public List<NamesDto> saveAll(ArrayList<Names> names) throws NameException {
+	public List<NamesDto> saveAll(ArrayList<Names> names) throws NameException, NameException, DuplicatedNameException {
 		// Retrieve name from data source 
 		var registers = this.namesRepository.findAll().stream()
 				.map(Names::getName)
@@ -122,7 +127,7 @@ public class NamesServiceImpl implements INamesService {
 		
 		// Condition to throw customized exception if both size are equals
 		if (nameTemp.size() == duplicatedNames.size())
-			throw new NameException("Deu ruim!!!");
+			throw new DuplicatedNameException("Deu ruim!!!");
 		
 		// list of objects
 		var uniqueNamesTemp = nameTemp.stream()
@@ -134,7 +139,7 @@ public class NamesServiceImpl implements INamesService {
 		// Get the non-duplicated parameters
 		uniqueNamesTemp.removeAll(registers);
 		
-		// Change from set to list
+		// from set to list
 		var uniqueNames = uniqueNamesTemp.stream()
 				.map(u -> new Names(u, now()))
 				.collect(toList());		
