@@ -40,12 +40,12 @@ public class NamesServiceImpl implements INamesService {
 	 * @exception NameException
 	 */
 	@Override
-	public NamesDto save(Names name) throws NameException {
+	public NamesDto save(Names name) throws DuplicatedNameException {
 		var duplicationResult = this.namesRepository.findAll().stream()
 				.anyMatch(pUtils.compareNamePredicate(name.getName()));
 
 		if (duplicationResult)
-			throw new NameException(format("Name %s is duplicated", name.getName()));
+			throw new DuplicatedNameException(format("Name %s is duplicated", name.getName()));
 
 		name.setName(name.getName().toLowerCase());
 		name.setCreatedAt(now());
@@ -71,9 +71,10 @@ public class NamesServiceImpl implements INamesService {
 	 */
 	@Override
 	public Boolean nameExists(String name) {
-		this.namesRepository.findAll().stream().anyMatch(pUtils.compareNamePredicate(name));
+		String nameStr = name.toLowerCase();
+		this.namesRepository.findAll().stream().anyMatch(pUtils.compareNamePredicate(nameStr));
 		var duplicationResult = this.namesRepository.findAll().stream()
-				.anyMatch(pUtils.compareNamePredicate(name));
+				.anyMatch(pUtils.compareNamePredicate(nameStr));
 
 		if (duplicationResult)
 			return true;

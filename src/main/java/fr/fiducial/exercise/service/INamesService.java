@@ -15,7 +15,7 @@ public interface INamesService {
 	
 	List<NamesDto> saveAll(ArrayList<Names> names) throws DuplicatedNameException, NameException;
 	
-	NamesDto save(Names name) throws NameException;
+	NamesDto save(Names name) throws DuplicatedNameException;
 	
 	Page<Names> listNames(Pageable pageable);
 	

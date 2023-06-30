@@ -49,7 +49,7 @@ public class NameController {
 	
 	@PostMapping("/addName")
 	@ResponseStatus(CREATED)
-	NamesDto addName(@Valid @RequestBody Names name) throws NameException {	
+	NamesDto addName(@Valid @RequestBody Names name) throws DuplicatedNameException {	
 		return this.namesServiceImpl.save(name);
 	}
 	
