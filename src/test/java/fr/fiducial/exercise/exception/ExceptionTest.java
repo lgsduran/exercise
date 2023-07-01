@@ -52,7 +52,8 @@ class ExceptionTest {
 				.collect(toCollection(ArrayList::new));
 		var collect = list.stream().map(u -> new Names(u, now()))
 				.collect(toCollection(ArrayList::new));
-		assertThrows(DuplicatedNameException.class, () -> namesServiceImpl.saveAll(collect));
+		assertThrows(DuplicatedNameException.class, 
+				() -> namesServiceImpl.saveAll(collect));
 	}
 	
 	@Test
