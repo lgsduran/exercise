@@ -40,7 +40,8 @@ class ExceptionTest {
 	@Order(1)
 	public void testSaveException() throws DuplicatedNameException {
 		//namesServiceImpl.save(nameTest);
-		assertThrows(DuplicatedNameException.class, () -> namesServiceImpl.save(new Names("Jacob")));
+		assertThrows(DuplicatedNameException.class, 
+				() -> namesServiceImpl.save(new Names(arrNames[1])));
 	}
 	
 	@Test
@@ -56,7 +57,7 @@ class ExceptionTest {
 	
 	@Test
 	@Order(3)  
-	public void testNameExists() {
+	public void testNameNotExists() {
 		Boolean nameExists = namesServiceImpl.nameExists("Ishigo");
 		assertFalse(nameExists);
 	}	
