@@ -37,7 +37,6 @@ class NamesServiceImplTest {
 
 	private NamesServiceImpl namesServiceImpl;
 
-	private ArrayList<Names> collect = null;
 	private Names nameTest = new Names("usertest");
 	String[] arrNames = {"Jacob","Michael","Matthew","Joshua","Christopher","Nicholas","Andrew","Joseph","Daniel","Tyler","William","Brandon","Ryan","John","Zachary","David","Anthony","James","Justin","Alexander","Jonathan"};
 
@@ -73,21 +72,13 @@ class NamesServiceImplTest {
 		assertTrue(nameExists);
 	}
 
-//	@Test
-//	@Order(4)
-//	public void testDeleteName() {
-//		try {
-//			namesServiceImpl.deleteByName(nameTest.getName());
-//		} catch (Exception e) {
-//			fail("Not yet implemented");
-//		}		
-//	}
-
 	@Test
 	@Order(4)
 	public void testSaveAll() throws NameException, DuplicatedNameException {
-		var list = of(arrNames).collect(toCollection(ArrayList::new));
-		collect = list.stream().map(u -> new Names(u, now())).collect(toCollection(ArrayList::new));
+		var list = of(arrNames)
+				.collect(toCollection(ArrayList::new));
+		var collect = list.stream().map(u -> new Names(u, now()))
+				.collect(toCollection(ArrayList::new));
 		List<NamesDto> dtos = namesServiceImpl.saveAll(collect);
 		boolean getId = dtos.stream().allMatch(x -> !Objects.isNull(x.getId()));
 		boolean getName = dtos.stream().allMatch(x -> x.getName().length() > 0);
