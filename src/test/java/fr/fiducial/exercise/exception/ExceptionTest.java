@@ -1,4 +1,4 @@
-package fr.fiducial.exercise.service.exception;
+package fr.fiducial.exercise.exception;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
