@@ -3,14 +3,15 @@ package fr.fiducial.exercise.dto;
 import static java.time.Instant.now;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.modelmapper.ModelMapper;
 
 import fr.fiducial.exercise.entity.Names;
 
-@Tag("UnitTest")
+@TestMethodOrder(OrderAnnotation.class)
 class NameDtoTest {
 
 	private ModelMapper modelMapper = new ModelMapper();
