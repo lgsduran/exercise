@@ -24,6 +24,7 @@ import fr.fiducial.exercise.entity.Names;
 import fr.fiducial.exercise.exception.DuplicatedNameException;
 import fr.fiducial.exercise.exception.NameException;
 import fr.fiducial.exercise.service.NamesServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 
 @RestController
@@ -41,29 +42,34 @@ public class NameController {
 		this.namesServiceImpl = namesServiceImpl;
 	}
 
+	@Operation(summary = "Creates an array of names")
 	@PostMapping("/addNames")
 	@ResponseStatus(CREATED)
 	List<NamesDto> saveAll(@Valid @RequestBody ArrayList<Names> names) throws NameException, DuplicatedNameException {
 		return this.namesServiceImpl.saveAll(names);	
 	}
 	
+	@Operation(summary = "Creates a new name")
 	@PostMapping("/addName")
 	@ResponseStatus(CREATED)
 	NamesDto addName(@Valid @RequestBody Names name) throws DuplicatedNameException {	
 		return this.namesServiceImpl.save(name);
 	}
 	
+	@Operation(summary = "Gets the list of names")
 	@GetMapping("/")
 	Page<Names> listNames(@Parameter(hidden = true) Pageable pageable) {
 		return this.namesServiceImpl.listNames(pageable);
 		
 	}
 	
+	@Operation(summary = "Checks if a name exists")
 	@GetMapping(path = "/{name}")
 	Boolean nameExists(@PathVariable String name) {
 		return this.namesServiceImpl.nameExists(name);
 	}
 	
+	@Operation(summary = "Deletes a name")
 	@DeleteMapping(path = "/{name}")
 	@Transactional
 	void deleteName(@PathVariable String name) throws NameException {

@@ -1,5 +1,13 @@
 package fr.fiducial.exercise.exception;
 
+import static java.time.Instant.now;
+import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Stream.of;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -9,16 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import fr.fiducial.exercise.entity.Names;
-import fr.fiducial.exercise.exception.DuplicatedNameException;
 import fr.fiducial.exercise.repository.NamesRepository;
 import fr.fiducial.exercise.service.NamesServiceImpl;
-
-import static java.time.Instant.now;
-import static java.util.stream.Collectors.toCollection;
-import static java.util.stream.Stream.of;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.ArrayList;
 
 @TestMethodOrder(OrderAnnotation.class)
 @SpringBootTest
@@ -41,7 +41,7 @@ class ExceptionTest {
 	public void testSaveException() throws DuplicatedNameException {
 		//namesServiceImpl.save(nameTest);
 		assertThrows(DuplicatedNameException.class, 
-				() -> namesServiceImpl.save(new Names(arrNames[1])));
+				() -> namesServiceImpl.save(new Names(arrNames[0])));
 	}
 	
 	@Test

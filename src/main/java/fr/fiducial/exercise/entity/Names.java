@@ -4,6 +4,8 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 import java.time.Instant;
 
+import javax.validation.constraints.Size;
+
 import org.springframework.data.annotation.CreatedDate;
 
 import jakarta.persistence.Column;
@@ -27,6 +29,7 @@ public class Names {
 	private long id;
 
 	@NotBlank(message = "Field must not be null.")
+	@Size(max = 20)
 	private String name;
 
 	@CreatedDate
