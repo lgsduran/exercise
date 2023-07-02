@@ -38,7 +38,7 @@ class NamesServiceImplTest {
 	private NamesServiceImpl namesServiceImpl;
 
 	private Names nameTest = new Names("usertest");
-	String[] arrNames = {"Jacob","Michael","Matthew","Joshua","Christopher","Nicholas","Andrew","Joseph","Daniel","Tyler","William","Brandon","Ryan","John","Zachary","David","Anthony","James","Justin","Alexander","Jonathan"};
+	private String[] arrNames = {"Jacob","Michael","Matthew","Joshua","Christopher","Nicholas","Andrew","Joseph","Daniel","Tyler","William","Brandon","Ryan","John","Zachary","David","Anthony","James","Justin","Alexander","Jonathan"};
 
 	@BeforeEach
 	public void setUp() throws Exception {
