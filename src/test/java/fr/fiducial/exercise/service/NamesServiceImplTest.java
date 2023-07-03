@@ -40,7 +40,11 @@ class NamesServiceImplTest {
 	private ConvertUtils utils;
 
 	private Names nameTest;
-	private String[] arrNames = {"Jacob","Michael","Matthew","Joshua","Christopher","Nicholas","Andrew","Joseph","Daniel","Tyler","William","Brandon","Ryan","John","Zachary","David","Anthony","James","Justin","Alexander","Jonathan"};
+	
+	private String[] arrNames = {"Jacob","Michael","Matthew","Joshua",
+			"Christopher","Nicholas","Andrew","Joseph","Daniel",
+			"Tyler","William","Brandon","Ryan","John","Zachary",
+			"David","Anthony","James","Justin","Alexander","Jonathan"};
 
 	@BeforeAll
 	void setUp() throws Exception {
