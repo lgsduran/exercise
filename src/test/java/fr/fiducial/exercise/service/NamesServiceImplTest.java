@@ -1,22 +1,21 @@
 package fr.fiducial.exercise.service;
 
-import static java.time.Instant.now;
-import static java.util.stream.Collectors.toCollection;
-import static java.util.stream.Stream.of;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import static org.springframework.data.domain.PageRequest.of;
 import static org.springframework.data.domain.Sort.by;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,7 +26,9 @@ import fr.fiducial.exercise.entity.Names;
 import fr.fiducial.exercise.exception.DuplicatedNameException;
 import fr.fiducial.exercise.exception.NameException;
 import fr.fiducial.exercise.repository.NamesRepository;
+import fr.fiducial.exercise.utils.ConvertUtils;
 
+@TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @SpringBootTest
 class NamesServiceImplTest {
@@ -36,13 +37,17 @@ class NamesServiceImplTest {
 	private NamesRepository namesRepository;
 
 	private NamesServiceImpl namesServiceImpl;
+	private ConvertUtils utils;
 
-	private Names nameTest = new Names("usertest");
+	private Names nameTest;
 	private String[] arrNames = {"Jacob","Michael","Matthew","Joshua","Christopher","Nicholas","Andrew","Joseph","Daniel","Tyler","William","Brandon","Ryan","John","Zachary","David","Anthony","James","Justin","Alexander","Jonathan"};
 
-	@BeforeEach
-	public void setUp() throws Exception {
+	@BeforeAll
+	void setUp() throws Exception {
 		namesServiceImpl = new NamesServiceImpl(namesRepository);
+		utils = new ConvertUtils();
+		nameTest = new Names("usertest");
+		
 	}
 
 	@Test
@@ -75,11 +80,9 @@ class NamesServiceImplTest {
 	@Test
 	@Order(4)
 	public void testSaveAll() throws NameException, DuplicatedNameException {
-		var list = of(arrNames)
-				.collect(toCollection(ArrayList::new));
-		var collect = list.stream().map(u -> new Names(u, now()))
-				.collect(toCollection(ArrayList::new));
-		List<NamesDto> dtos = namesServiceImpl.saveAll(collect);
+		var arr = utils.fromArrayToList(arrNames);
+		var fromArrayToObj = utils.fromArrayToObj(arr);
+		List<NamesDto> dtos = namesServiceImpl.saveAll(fromArrayToObj);
 		boolean getId = dtos.stream().allMatch(x -> !Objects.isNull(x.getId()));
 		boolean getName = dtos.stream().allMatch(x -> x.getName().length() > 0);
 		boolean getCreatedAt = dtos.stream().allMatch(x -> x.getCreated_At() != null);
@@ -89,5 +92,14 @@ class NamesServiceImplTest {
 				() -> assertTrue(getCreatedAt, "TimeStamp")
 		);		
 	}
-
+	
+	@AfterAll
+	void tearDown() throws Exception {
+		namesServiceImpl.deleteByName(nameTest.getName());
+		utils.fromArrayToList(arrNames)
+			.forEach(x -> {
+				Names byName = namesRepository.findByName(x);
+				namesRepository.deleteById(byName.getId());
+			});
+	}
 }
