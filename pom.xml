@@ -15,7 +15,7 @@
 	<name>exercise</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		<springdoc-openapi.version>2.1.0</springdoc-openapi.version>
 		<modelmapper.version>3.1.0</modelmapper.version>
 	</properties>

@@ -42,14 +42,14 @@ class ExceptionTest {
 
 	@Test
 	@Order(1)
-	public void testSaveException() throws DuplicatedNameException {		
+	void testSaveException() throws DuplicatedNameException {		
 		assertThrows(DuplicatedNameException.class, 
 				() -> namesServiceImpl.save(new Names(arrNames[0])));
 	}
 	
 	@Test
 	@Order(2)
-	public void testSaveAllException() throws DuplicatedNameException {
+	void testSaveAllException() throws DuplicatedNameException {
 		//namesServiceImpl.save(nameTest);
 		var arr = utils.fromArrayToList(arrNames);
 		var fromArrayToObj = utils.fromArrayToObj(arr);
@@ -59,7 +59,7 @@ class ExceptionTest {
 	
 	@Test
 	@Order(3)  
-	public void testNameNotExists() {
+	void testNameNotExists() {
 		Boolean nameExists = namesServiceImpl.nameExists("Ishigo");
 		assertFalse(nameExists);
 	}

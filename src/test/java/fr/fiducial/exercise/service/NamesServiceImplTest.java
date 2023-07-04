@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import static org.springframework.data.domain.PageRequest.of;
 import static org.springframework.data.domain.Sort.by;
 
-import java.util.List;
 import java.util.Objects;
 
 import org.junit.jupiter.api.AfterAll;
@@ -21,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 
-import fr.fiducial.exercise.dto.NamesDto;
 import fr.fiducial.exercise.entity.Names;
 import fr.fiducial.exercise.exception.DuplicatedNameException;
 import fr.fiducial.exercise.exception.NameException;
@@ -56,37 +54,37 @@ class NamesServiceImplTest {
 
 	@Test
 	@Order(1)
-	public void testNamesServiceImpl() {
+	void testNamesServiceImpl() {
 		assertNotNull(namesServiceImpl);
 	}
 
 	@Test
 	@Order(2)
-	public void testSave() throws DuplicatedNameException {
+	void testSave() throws DuplicatedNameException {
 		var result = namesServiceImpl.save(nameTest);
 		assertNotNull(result.getId(), "Id");
 	}
 
 	@Test
 	@Order(3)
-	public void testListNames() {
+	void testListNames() {
 		Page<Names> listNames = namesServiceImpl.listNames(of(0, 3, by("name")));
 		assertTrue(!listNames.isEmpty());
 	}
 
 	@Test
 	@Order(5)  
-	public void testNameExists() {
+	void testNameExists() {
 		Boolean nameExists = namesServiceImpl.nameExists(nameTest.getName());
 		assertTrue(nameExists);
 	}
 
 	@Test
 	@Order(4)
-	public void testSaveAll() throws NameException, DuplicatedNameException {
+	void testSaveAll() throws NameException, DuplicatedNameException {
 		var arr = utils.fromArrayToList(arrNames);
 		var fromArrayToObj = utils.fromArrayToObj(arr);
-		List<NamesDto> dtos = namesServiceImpl.saveAll(fromArrayToObj);
+		var dtos = namesServiceImpl.saveAll(fromArrayToObj);
 		boolean getId = dtos.stream().allMatch(x -> !Objects.isNull(x.getId()));
 		boolean getName = dtos.stream().allMatch(x -> x.getName().length() > 0);
 		boolean getCreatedAt = dtos.stream().allMatch(x -> x.getCreated_At() != null);
@@ -101,7 +99,7 @@ class NamesServiceImplTest {
 	void tearDown() throws Exception {
 		namesServiceImpl.deleteByName(nameTest.getName());
 		utils.fromArrayToList(arrNames)
-			.forEach(x -> {
+			.forEach(x -> {				
 				Names byName = namesRepository.findByName(x);
 				namesRepository.deleteById(byName.getId());
 			});

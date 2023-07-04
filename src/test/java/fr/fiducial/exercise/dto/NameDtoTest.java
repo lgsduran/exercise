@@ -18,7 +18,7 @@ class NameDtoTest {
 
 	@Test
 	@Order(1)
-	public void testConvertNameEntityToNameDto() {
+	void testConvertNameEntityToNameDto() {
 		var name = new NamesDto(1L, "luiz", now());
 		var nameDto = modelMapper.map(name, NamesDto.class);
 		assertEquals(name.getId(), nameDto.getId());
@@ -28,7 +28,7 @@ class NameDtoTest {
 	
 	@Test
 	@Order(2)
-	public void testConvertNameDtoToNameEntity() {
+	void testConvertNameDtoToNameEntity() {
 		var name = new Names();
 		name.setId(1L);
 		name.setName("luiz");
