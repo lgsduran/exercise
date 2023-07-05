@@ -2,7 +2,6 @@ package fr.fiducial.exercise.service;
 
 import static java.lang.String.format;
 import static java.time.Instant.now;
-import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isAllBlank;
 
 import java.lang.reflect.Method;
@@ -20,12 +19,14 @@ import fr.fiducial.exercise.entity.Names;
 import fr.fiducial.exercise.exception.DuplicatedNameException;
 import fr.fiducial.exercise.exception.NameException;
 import fr.fiducial.exercise.repository.NamesRepository;
+import fr.fiducial.exercise.utils.ConvertUtils;
 import fr.fiducial.exercise.utils.PredicateUtils;
 
 @Service
 public class NamesServiceImpl implements INamesService {
 
 	private PredicateUtils pUtils = new PredicateUtils();
+	private ConvertUtils convertUtils = new ConvertUtils();
 	private NamesRepository namesRepository;
 
 	/**
@@ -114,40 +115,29 @@ public class NamesServiceImpl implements INamesService {
 			throw new NameException("no empty value accepted");
 		
 		// Retrieve name from data source 
-		var registers = this.namesRepository.findAll().stream()
-				.map(Names::getName)
-				.map(String::toLowerCase)
-				.collect(toList());
+		var findAll = convertUtils.convertToList(this.namesRepository.findAll(), Names::getName);
+		var registers = convertUtils.convertToList(findAll, String::toLowerCase);
 		
 		// Retrieve data from parameters
-		var nameTemp = names.stream()
-				.map(Names::getName)
-				.map(String::toLowerCase)
-				.collect(toList());
+		var sourceTemp = convertUtils.convertToList(names, Names::getName);
+		var source = convertUtils.convertToList(sourceTemp, String::toLowerCase);
 		
 		// Find duplicated items
-		var duplicatedNames = registers.stream()
-				.filter(r -> nameTemp.contains(r))
-				.collect(toList());
+		var duplicatedNames = pUtils.getElements(registers, r -> source.contains(r));
 		
 		// Condition to throw customized exception if both size are equals
-		if (nameTemp.size() == duplicatedNames.size())
+		if (source.size() == duplicatedNames.size())
 			throw new DuplicatedNameException("Duplicated");
 		
 		// list of objects
-		var uniqueNamesTemp = nameTemp.stream()
-				.map(n -> new Names(n))
-				.map(n -> n.getName())
-				//.map(String::toLowerCase)
-				.collect(toList());
+		var uniqueTemp = convertUtils.convertToList(source, n -> new Names(n));
+		var uniqueNamesTemp = convertUtils.convertToList(uniqueTemp, n -> n.getName());
 
 		// Get the non-duplicated parameters
 		uniqueNamesTemp.removeAll(registers);
 		
-		// from set to list
-		var uniqueNames = uniqueNamesTemp.stream()
-				.map(u -> new Names(u, now()))
-				.collect(toList());		
+		// change to the object again
+		var uniqueNames = convertUtils.convertToList(uniqueNamesTemp, u -> new Names(u, now()));
 
 		// Condition to throw customized exception if uniqueName is empty
 		if (uniqueNames.isEmpty())
@@ -155,9 +145,7 @@ public class NamesServiceImpl implements INamesService {
 		
 		this.namesRepository.saveAll(uniqueNames);		
 		
-		// Return dto
-		return uniqueNames.stream()
-				.map(u -> new NamesDto(u.getId(), u.getName(), u.getCreatedAt()))
-				.collect(toList());
+		// Return dto		
+		return convertUtils.convertToList(uniqueNames, u -> new NamesDto(u.getId(), u.getName(), u.getCreatedAt()));
 	}
 }
