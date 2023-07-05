@@ -3,6 +3,7 @@ package fr.fiducial.exercise.service;
 import static java.lang.String.format;
 import static java.time.Instant.now;
 import static java.util.stream.Collectors.toList;
+import static org.apache.commons.lang3.StringUtils.isAllBlank;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -109,6 +110,9 @@ public class NamesServiceImpl implements INamesService {
 
 	@Override
 	public List<NamesDto> saveAll(ArrayList<Names> names) throws NameException, NameException, DuplicatedNameException {
+		if(names.stream().allMatch(x -> isAllBlank(x.getName())))
+			throw new NameException("no empty value accepted");
+		
 		// Retrieve name from data source 
 		var registers = this.namesRepository.findAll().stream()
 				.map(Names::getName)
@@ -128,7 +132,7 @@ public class NamesServiceImpl implements INamesService {
 		
 		// Condition to throw customized exception if both size are equals
 		if (nameTemp.size() == duplicatedNames.size())
-			throw new DuplicatedNameException("Deu ruim!!!");
+			throw new DuplicatedNameException("Duplicated");
 		
 		// list of objects
 		var uniqueNamesTemp = nameTemp.stream()
