@@ -7,7 +7,7 @@ This API project is a result of an execise
 
 ## Stacks
 
-- [Java 11](http://www.oracle.com/technetwork/java/javase/downloads)
+- [Java 17](http://www.oracle.com/technetwork/java/javase/downloads)
 - [Spring Boot](https://spring.io/projects/spring-boot)
 - [Maven](https://maven.apache.org)
 - [MariaDB](https://mariadb.org)
