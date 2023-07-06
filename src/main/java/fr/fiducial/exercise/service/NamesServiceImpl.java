@@ -2,6 +2,7 @@ package fr.fiducial.exercise.service;
 
 import static java.lang.String.format;
 import static java.time.Instant.now;
+import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isAllBlank;
 
 import java.lang.reflect.Method;
@@ -26,7 +27,7 @@ import fr.fiducial.exercise.utils.PredicateUtils;
 public class NamesServiceImpl implements INamesService {
 
 	private PredicateUtils pUtils = new PredicateUtils();
-	private ConvertUtils convertUtils = new ConvertUtils();
+	private ConvertUtils conUtils = new ConvertUtils();
 	private NamesRepository namesRepository;
 
 	/**
@@ -114,30 +115,33 @@ public class NamesServiceImpl implements INamesService {
 		if(names.stream().allMatch(x -> isAllBlank(x.getName())))
 			throw new NameException("no empty value accepted");
 		
-		// Retrieve name from data source 
-		var findAll = convertUtils.convertToList(this.namesRepository.findAll(), Names::getName);
-		var registers = convertUtils.convertToList(findAll, String::toLowerCase);
-		
+		// Retrieve name from data source		
+		var registers = conUtils.formatList(this.namesRepository.findAll());
+
 		// Retrieve data from parameters
-		var sourceTemp = convertUtils.convertToList(names, Names::getName);
-		var source = convertUtils.convertToList(sourceTemp, String::toLowerCase);
-		
+		var inputs = conUtils.formatList(names);
+
 		// Find duplicated items
-		var duplicatedNames = pUtils.getElements(registers, r -> source.contains(r));
+		var duplicatedNames = pUtils.getElements(registers, r -> inputs.contains(r));
 		
 		// Condition to throw customized exception if both size are equals
-		if (source.size() == duplicatedNames.size())
+		if (inputs.size() == duplicatedNames.size())
 			throw new DuplicatedNameException("Duplicated");
 		
 		// list of objects
-		var uniqueTemp = convertUtils.convertToList(source, n -> new Names(n));
-		var uniqueNamesTemp = convertUtils.convertToList(uniqueTemp, n -> n.getName());
+		var uniqueNamesTemp = inputs.stream()
+				.map(n -> new Names(n))
+				.map(n -> n.getName())
+				.collect(toList());
+		
 
 		// Get the non-duplicated parameters
 		uniqueNamesTemp.removeAll(registers);
 		
-		// change to the object again
-		var uniqueNames = convertUtils.convertToList(uniqueNamesTemp, u -> new Names(u, now()));
+		// change to the object again		
+		var uniqueNames = uniqueNamesTemp.stream()
+				.map(u -> new Names(u, now()))
+				.collect(toList());
 
 		// Condition to throw customized exception if uniqueName is empty
 		if (uniqueNames.isEmpty())
@@ -146,6 +150,6 @@ public class NamesServiceImpl implements INamesService {
 		this.namesRepository.saveAll(uniqueNames);		
 		
 		// Return dto		
-		return convertUtils.convertToList(uniqueNames, u -> new NamesDto(u.getId(), u.getName(), u.getCreatedAt()));
-	}
+		return conUtils.convertToList(uniqueNames, u -> new NamesDto(u.getId(), u.getName(), u.getCreatedAt()));
+	}	
 }

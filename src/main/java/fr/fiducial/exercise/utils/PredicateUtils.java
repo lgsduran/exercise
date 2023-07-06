@@ -19,6 +19,14 @@ public class PredicateUtils {
 		return x -> x.getName().equalsIgnoreCase(strName);
 	}
 	
+	/**
+	 * @see filter the elements based on the predicate parameter
+	 * @param <T>
+	 * @param list
+	 * @param p1
+	 * @return
+	 */	
+	
 	public <T> List<T> getElements(List<T> list, Predicate<? super T> p1) {
 		return list.stream().filter(p1).collect(toList());
 	}

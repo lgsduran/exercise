@@ -47,6 +47,18 @@ public class ConvertUtils {
 		return list.stream().map(f1).collect(toList());
 	}
 	
+	/**
+	 * @see Format elements to String::toLowerCase
+	 * @param names
+	 * @return
+	 */
+	public List<String> formatList(List<Names> names) {
+		return names.stream()
+				.map(Names::getName)
+				.map(String::toLowerCase)
+				.collect(toList());
+	}
+	
 	
 
 }
