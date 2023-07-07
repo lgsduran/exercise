@@ -111,7 +111,7 @@ public class NamesServiceImpl implements INamesService {
 	 */
 
 	@Override
-	public List<NamesDto> saveAll(ArrayList<Names> names) throws NameException, NameException, DuplicatedNameException {
+	public List<NamesDto> saveAll(ArrayList<Names> names) throws NameException, DuplicatedNameException {
 		if(names.stream().allMatch(x -> isAllBlank(x.getName())))
 			throw new NameException("no empty value accepted");
 		
