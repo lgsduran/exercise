@@ -2,7 +2,7 @@ package fr.fiducial.exercise.service;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import static org.springframework.data.domain.PageRequest.of;
 import static org.springframework.data.domain.Sort.by;
@@ -43,13 +43,15 @@ class NamesServiceImplTest {
 			"Christopher","Nicholas","Andrew","Joseph","Daniel",
 			"Tyler","William","Brandon","Ryan","John","Zachary",
 			"David","Anthony","James","Justin","Alexander","Jonathan"};
+	
+	private int initialSize;
 
 	@BeforeAll
 	void setUp() throws Exception {
 		namesServiceImpl = new NamesServiceImpl(namesRepository);
 		utils = new ConvertUtils();
 		nameTest = new Names("usertest");
-		
+		initialSize = namesRepository.findAll().size();		
 	}
 
 	@Test
@@ -103,5 +105,7 @@ class NamesServiceImplTest {
 				Names byName = namesRepository.findByName(x);
 				namesRepository.deleteById(byName.getId());
 			});
+		
+		assertEquals(initialSize, namesRepository.findAll().size());
 	}
 }

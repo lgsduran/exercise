@@ -1,5 +1,6 @@
 package fr.fiducial.exercise.exception;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
@@ -31,11 +32,14 @@ class ExceptionTest {
 	private ConvertUtils utils;	
 
 	String[] arrNames = {"Jacob","Michael"};
+	
+	private int initialSize;
 
 	@BeforeAll
 	void setUp() throws Exception {
 		namesServiceImpl = new NamesServiceImpl(namesRepository);
 		utils = new ConvertUtils();
+		initialSize = namesRepository.findAll().size();	
 		namesServiceImpl.save(new Names(arrNames[0]));
 		namesServiceImpl.save(new Names(arrNames[1]));
 	}
@@ -81,6 +85,7 @@ class ExceptionTest {
 				Names byName = namesRepository.findByName(x);
 				namesRepository.deleteById(byName.getId());
 			});
+		assertEquals(initialSize, namesRepository.findAll().size());
 	}
 
 }
