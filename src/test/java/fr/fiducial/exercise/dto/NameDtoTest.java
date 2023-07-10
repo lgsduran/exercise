@@ -36,7 +36,7 @@ class NameDtoTest {
 		var nameDto = modelMapper.map(name, Names.class);
 		assertEquals(nameDto.getId(), name.getId());
 		assertEquals(nameDto.getName(), name.getName());
-		assertEquals(nameDto.getCreatedAt(), nameDto.getCreatedAt());
+		assertEquals(nameDto.getCreatedAt(), name.getCreatedAt());
 	}
 
 }
