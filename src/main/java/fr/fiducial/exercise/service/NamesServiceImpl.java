@@ -79,10 +79,7 @@ public class NamesServiceImpl implements INamesService {
 		var duplicationResult = this.namesRepository.findAll().stream()
 				.anyMatch(pUtils.compareNamePredicate(nameStr));
 
-		if (duplicationResult)
-			return true;
-
-		return false;
+		return duplicationResult ? true : false;
 	}
 
 	/**
