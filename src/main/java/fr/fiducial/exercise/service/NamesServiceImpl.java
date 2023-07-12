@@ -76,10 +76,10 @@ public class NamesServiceImpl implements INamesService {
 	public Boolean nameExists(String name) {
 		String nameStr = name.toLowerCase();
 		this.namesRepository.findAll().stream().anyMatch(pUtils.compareNamePredicate(nameStr));
-		var duplicationResult = this.namesRepository.findAll().stream()
+		var isDuplicated = this.namesRepository.findAll().stream()
 				.anyMatch(pUtils.compareNamePredicate(nameStr));
 
-		return duplicationResult ? true : false;
+		return isDuplicated ? true : false;
 	}
 
 	/**
