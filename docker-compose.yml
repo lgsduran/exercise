@@ -11,6 +11,18 @@ services:
       - '3306:3306'
     networks:
       - fiducial-net
+    healthcheck:
+      interval: 30s
+      retries: 3
+      test:
+        [
+          "CMD",
+          "healthcheck.sh",
+          "--su-mysql",
+          "--connect",
+          "--innodb_initialized"
+        ]
+      timeout: 30s
       
 networks:
   fiducial-net:
