@@ -74,8 +74,7 @@ public class NamesServiceImpl implements INamesService {
 	 */
 	@Override
 	public Boolean nameExists(String name) {
-		String nameStr = name.toLowerCase();
-		this.namesRepository.findAll().stream().anyMatch(pUtils.compareNamePredicate(nameStr));
+		String nameStr = name.toLowerCase();		
 		var isDuplicated = this.namesRepository.findAll().stream()
 				.anyMatch(pUtils.compareNamePredicate(nameStr));
 
@@ -113,10 +112,10 @@ public class NamesServiceImpl implements INamesService {
 			throw new NameException("no empty value accepted");
 		
 		// Retrieve name from data source		
-		var registers = conUtils.formatList(this.namesRepository.findAll());
+		var registers = conUtils.formatToList(this.namesRepository.findAll());
 
 		// Retrieve data from parameters
-		var inputs = conUtils.formatList(names);
+		var inputs = conUtils.formatToList(names);
 
 		// Find duplicated items
 		var duplicatedNames = pUtils.getElements(registers, r -> inputs.contains(r));

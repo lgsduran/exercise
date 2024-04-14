@@ -34,7 +34,7 @@ class NamesServiceImplTest {
 	@Autowired
 	private NamesRepository namesRepository;
 
-	private NamesServiceImpl namesServiceImpl;
+	private NamesServiceImpl namesService;
 	private ConvertUtils utils;
 
 	private Names nameTest;
@@ -48,7 +48,7 @@ class NamesServiceImplTest {
 
 	@BeforeAll
 	void setUp() throws Exception {
-		namesServiceImpl = new NamesServiceImpl(namesRepository);
+		namesService = new NamesServiceImpl(namesRepository);
 		utils = new ConvertUtils();
 		nameTest = new Names("usertest");
 		initialSize = namesRepository.findAll().size();		
@@ -57,27 +57,27 @@ class NamesServiceImplTest {
 	@Test
 	@Order(1)
 	void testNamesServiceImpl() {
-		assertNotNull(namesServiceImpl);
+		assertNotNull(namesService);
 	}
 
 	@Test
 	@Order(2)
 	void testSave() throws DuplicatedNameException {
-		var result = namesServiceImpl.save(nameTest);
+		var result = namesService.save(nameTest);
 		assertNotNull(result.getId(), "Id");
 	}
 
 	@Test
 	@Order(3)
 	void testListNames() {
-		Page<Names> listNames = namesServiceImpl.listNames(of(0, 3, by("name")));
+		Page<Names> listNames = namesService.listNames(of(0, 3, by("name")));
 		assertTrue(!listNames.isEmpty());
 	}
 
 	@Test
 	@Order(5)  
 	void testNameExists() {
-		Boolean nameExists = namesServiceImpl.nameExists(nameTest.getName());
+		Boolean nameExists = namesService.nameExists(nameTest.getName());
 		assertTrue(nameExists);
 	}
 
@@ -86,7 +86,7 @@ class NamesServiceImplTest {
 	void testSaveAll() throws NameException, DuplicatedNameException {
 		var arr = utils.fromArrayToList(arrNames);
 		var fromArrayToObj = utils.fromArrayToObj(arr);
-		var dtos = namesServiceImpl.saveAll(fromArrayToObj);
+		var dtos = namesService.saveAll(fromArrayToObj);
 		boolean getId = dtos.stream().allMatch(x -> !Objects.isNull(x.getId()));
 		boolean getName = dtos.stream().allMatch(x -> x.getName().length() > 0);
 		boolean getCreatedAt = dtos.stream().allMatch(x -> x.getCreated_At() != null);
@@ -99,7 +99,7 @@ class NamesServiceImplTest {
 	
 	@AfterAll
 	void tearDown() throws Exception {
-		namesServiceImpl.deleteByName(nameTest.getName());
+		namesService.deleteByName(nameTest.getName());
 		utils.fromArrayToList(arrNames)
 			.forEach(x -> {				
 				Names byName = namesRepository.findByName(x);

@@ -40,6 +40,17 @@ public class Names {
 
 	public Names(String name) {
 		this.name = name;
+	}	
+
+	/**
+	 * @param id
+	 * @param name
+	 * @param createdAt
+	 */
+	public Names(long id, String name, Instant createdAt) {
+		this.id = id;
+		this.name = name;
+		this.createdAt = createdAt;
 	}
 
 	public Names(String name, Instant createdAt) {

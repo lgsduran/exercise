@@ -52,7 +52,7 @@ public class ConvertUtils {
 	 * @param names
 	 * @return
 	 */
-	public List<String> formatList(List<Names> names) {
+	public List<String> formatToList(List<Names> names) {
 		return names.stream()
 				.map(Names::getName)
 				.map(String::toLowerCase)
