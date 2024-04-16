@@ -43,71 +43,81 @@ class NamesServiceUnitTest {
 	@Test
 	@DisplayName("Should retrieve all names with default parameters")
 	void getAllNames() throws NameException, DuplicatedNameException {
-		ArrayList<Names> namesList = new ArrayList<>();
-		namesList.add(new Names(1L, "Bat girl", now()));
-		namesList.add(new Names(2L, "Batman", now()));
+		ArrayList<Names> namesList = new ArrayList<Names>();
+		namesList.add(new Names("Lebron James", now()));
+		namesList.add(new Names("Derrick Rose", now()));
 		namesService.saveAll(namesList);
- 		
- 		when(namesRepository.findAll(any(Pageable.class)))
- 			.thenReturn(new PageImpl<>(namesList));
- 		
-		var result = namesService.listNames(of(0, 3, by("name")))
-				.toList();
-		
-		assertThat(result.size()).isEqualTo(2);
-		assertThat(result.get(0).getName()).isEqualToIgnoringCase("Bat girl");
-		assertThat(result.get(1).getName()).isEqualToIgnoringCase("batman");
+
+		when(namesRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(namesList));
+
+		var values = namesService.listNames(of(0, 3, by("name"))).toList();
+
+		assertThat(values).hasSize(2);
+		assertThat(values.get(0).getName()).isEqualToIgnoringCase("Lebron James");
+		assertThat(values.get(1).getName()).isEqualToIgnoringCase("Derrick Rose");
 	}
 
 	@Test
 	@DisplayName("Should save the name with default parameters")
 	public void testsaveName() throws DuplicatedNameException {
-		var name = new Names(1L, "Bat girl", now());
+		var name = new Names(1L, "Lebron James", now());
 		namesService.save(name);
-		
+
 		// verifies that the method is called only once
-		verify(namesRepository, times(1)).save(name);		
-		
+		verify(namesRepository, times(1)).save(name);
+
 		// captures argument values for further assertions.
 		var nameArgumentCaptor = ArgumentCaptor.forClass(Names.class);
-		
-		// verifies that the mocking service will take a Name object and perform the repository method.
+
+		// verifies that the mocking service will take a Name object and perform the
+		// repository method.
 		verify(namesRepository).save(nameArgumentCaptor.capture());
-		
+
 		// takes the captor value out of it and compared with the actual value.
 		var value = nameArgumentCaptor.getValue();
-		
+
 		assertNotNull(value.getId());
-		assertThat("bat girl").isEqualToIgnoringCase(value.getName());
+		assertThat("Lebron James").isEqualToIgnoringCase(value.getName());
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Test
 	@DisplayName("Should save the names with default parameters")
 	public void testsaveAllName() throws DuplicatedNameException, NameException {
 		ArrayList<Names> namesList = new ArrayList<Names>();
-		namesList.add(new Names(1L, "Bat girl", now()));
-		namesList.add(new Names(2L, "Batman", now()));
-		namesService.saveAll(namesList);		
-		
-		when(namesRepository.saveAll(anyIterable())).thenReturn(namesList);	
-		
+		namesList.add(new Names("Lebron James", now()));
+		namesList.add(new Names("Derrick Rose", now()));
+		namesService.saveAll(namesList);
+
+		when(namesRepository.saveAll(anyIterable())).thenReturn(namesList);
+
 		verify(namesRepository, times(1)).saveAll(anyIterable());
-		
+
 		ArgumentCaptor<Iterable<Names>> namesCaptor = ArgumentCaptor.forClass(Iterable.class);
 		verify(namesRepository).saveAll(namesCaptor.capture());
-		
-		List<Iterable<Names>> values1 = namesCaptor.getAllValues();
-		
-		assertThat(values1.size()).isEqualTo(1);
-		//assertThat("bat girl").isEqualToIgnoringCase(values1.get(0).);
 
+		List<Iterable<Names>> values = namesCaptor.getAllValues();
+
+		int i = 0;
+		var it = values.get(0).iterator();
+		while (it.hasNext()) {
+			var name = (Names) it.next();
+			assertThat(name.getName()).isEqualToIgnoringCase(namesList.get(i).getName());
+			i++;
+		}
+
+//		assertThat(values).hasSize(1).element(0)
+//				.matches(x -> x.iterator().next().getName().equalsIgnoreCase("Lebron James"));
+
+//		assertThat(values).allSatisfy(value -> {
+//			assertThat(value.iterator().next().getName()).isEqualToIgnoringCase("Derrick Rose");
+//		});
 	}
 
 	@Test
 	@DisplayName("Should verify that name exists")
 	void testNameExists() {
-		var name1 = new Names(1L, "batman", now());
+		var name1 = new Names(1L, "latrell sprewell", now());
 		when(namesRepository.findAll()).thenReturn(Arrays.asList(name1));
 		var nameExists = namesService.nameExists(name1.getName());
 		assertTrue(nameExists);
