@@ -118,7 +118,7 @@ class NamesServiceUnitTest {
 
 	@Test
 	@DisplayName("Should delete name")
-	void whenAssetsDeletedByCode_thenControlFlowAsExpected() throws NameException {
+	void whenAssetsDeletedByName_thenControlFlowAsExpected() throws NameException {
 		var name = new Names(100L, "Lebron James", now());
 		when(this.namesRepository.findByName(any(String.class))).thenReturn(name);
 		assertThatNoException().isThrownBy(() -> this.namesService.deleteByName(name.getName()));
