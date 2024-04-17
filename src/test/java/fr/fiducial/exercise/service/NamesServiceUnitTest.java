@@ -2,6 +2,7 @@ package fr.fiducial.exercise.service;
 
 import static java.time.Instant.now;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -46,11 +47,11 @@ class NamesServiceUnitTest {
 		ArrayList<Names> namesList = new ArrayList<Names>();
 		namesList.add(new Names("Lebron James", now()));
 		namesList.add(new Names("Derrick Rose", now()));
-		namesService.saveAll(namesList);
+		this.namesService.saveAll(namesList);
 
-		when(namesRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(namesList));
+		when(this.namesRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(namesList));
 
-		var values = namesService.listNames(of(0, 3, by("name"))).toList();
+		var values = this.namesService.listNames(of(0, 3, by("name"))).toList();
 
 		assertThat(values).hasSize(2);
 		assertThat(values.get(0).getName()).isEqualToIgnoringCase("Lebron James");
@@ -61,23 +62,23 @@ class NamesServiceUnitTest {
 	@DisplayName("Should save the name with default parameters")
 	public void testsaveName() throws DuplicatedNameException {
 		var name = new Names(1L, "Lebron James", now());
-		namesService.save(name);
+		this.namesService.save(name);
 
 		// verifies that the method is called only once
-		verify(namesRepository, times(1)).save(name);
+		verify(this.namesRepository, times(1)).save(name);
 
 		// captures argument values for further assertions.
 		var nameArgumentCaptor = ArgumentCaptor.forClass(Names.class);
 
 		// verifies that the mocking service will take a Name object and perform the
 		// repository method.
-		verify(namesRepository).save(nameArgumentCaptor.capture());
+		verify(this.namesRepository).save(nameArgumentCaptor.capture());
 
 		// takes the captor value out of it and compared with the actual value.
 		var value = nameArgumentCaptor.getValue();
 
 		assertNotNull(value.getId());
-		assertThat("Lebron James").isEqualToIgnoringCase(value.getName());
+		assertThat(value.getName()).matches("Lebron James"::equalsIgnoreCase);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -87,14 +88,14 @@ class NamesServiceUnitTest {
 		ArrayList<Names> namesList = new ArrayList<Names>();
 		namesList.add(new Names("Lebron James", now()));
 		namesList.add(new Names("Derrick Rose", now()));
-		namesService.saveAll(namesList);
+		this.namesService.saveAll(namesList);
 
-		when(namesRepository.saveAll(anyIterable())).thenReturn(namesList);
+		when(this.namesRepository.saveAll(anyIterable())).thenReturn(namesList);
 
-		verify(namesRepository, times(1)).saveAll(anyIterable());
+		verify(this.namesRepository, times(1)).saveAll(anyIterable());
 
 		ArgumentCaptor<Iterable<Names>> namesCaptor = ArgumentCaptor.forClass(Iterable.class);
-		verify(namesRepository).saveAll(namesCaptor.capture());
+		verify(this.namesRepository).saveAll(namesCaptor.capture());
 
 		List<Iterable<Names>> values = namesCaptor.getAllValues();
 
@@ -117,9 +118,18 @@ class NamesServiceUnitTest {
 	@Test
 	@DisplayName("Should verify that name exists")
 	void testNameExists() {
-		var name1 = new Names(1L, "latrell sprewell", now());
-		when(namesRepository.findAll()).thenReturn(Arrays.asList(name1));
-		var nameExists = namesService.nameExists(name1.getName());
+		var name = new Names(1L, "latrell sprewell", now());
+		when(this.namesRepository.findAll()).thenReturn(Arrays.asList(name));
+		var nameExists = this.namesService.nameExists(name.getName());
 		assertTrue(nameExists);
+	}
+
+	@Test
+	@DisplayName("Should delete name")
+	public void whenAssetsDeletedByCode_thenControlFlowAsExpected() throws NameException {
+		var name = new Names(1L, "Lebron James", now());
+		when(this.namesRepository.findByName(any(String.class))).thenReturn(name);
+
+		assertThatNoException().isThrownBy(() -> this.namesService.deleteByName(name.getName()));
 	}
 }
