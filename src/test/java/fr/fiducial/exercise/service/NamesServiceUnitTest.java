@@ -77,8 +77,9 @@ class NamesServiceUnitTest {
 		// takes the captor value out of it and compared with the actual value.
 		var value = nameArgumentCaptor.getValue();
 
-		assertNotNull(value.getId());
-		assertThat(value.getName()).matches("Lebron James"::equalsIgnoreCase);
+		assertThat(value.getName())
+			.isNotNull()
+			.matches(name.getName()::equalsIgnoreCase);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -101,9 +102,10 @@ class NamesServiceUnitTest {
 
 		int i = 0;
 		var it = values.get(0).iterator();
-		while (it.hasNext()) {
-			var name = (Names) it.next();
-			assertThat(name.getName()).isEqualToIgnoringCase(namesList.get(i).getName());
+		while (it.hasNext()) {			
+			assertThat(it.next().getName())
+				.isNotNull()
+				.matches(namesList.get(i).getName()::equalsIgnoreCase);			
 			i++;
 		}
 
@@ -127,9 +129,9 @@ class NamesServiceUnitTest {
 	@Test
 	@DisplayName("Should delete name")
 	public void whenAssetsDeletedByCode_thenControlFlowAsExpected() throws NameException {
-		var name = new Names(1L, "Lebron James", now());
+		var name = new Names(100L, "Lebron James", now());
 		when(this.namesRepository.findByName(any(String.class))).thenReturn(name);
-
 		assertThatNoException().isThrownBy(() -> this.namesService.deleteByName(name.getName()));
+		verify(this.namesRepository, times(1)).deleteById(name.getId());		
 	}
 }
