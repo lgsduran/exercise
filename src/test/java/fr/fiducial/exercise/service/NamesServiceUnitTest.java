@@ -52,9 +52,9 @@ class NamesServiceUnitTest {
 		verify(this.namesRepository, times(1)).findAll(any(Pageable.class));
 		
 		assertThat(values)
-		.hasSize(2)
-		.extracting("name")
-		.containsExactly("Lebron James", "Derrick Rose");
+			.hasSize(2)
+			.extracting("name")
+			.containsExactly("Lebron James", "Derrick Rose");
 	}
 
 	@Test
