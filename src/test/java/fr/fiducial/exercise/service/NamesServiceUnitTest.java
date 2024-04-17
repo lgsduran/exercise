@@ -40,7 +40,7 @@ class NamesServiceUnitTest {
 
 	@Test
 	@DisplayName("Should retrieve all names with default parameters")
-	void getAllNames() throws NameException, DuplicatedNameException {
+	void testGetAllNames() throws NameException, DuplicatedNameException {
 		ArrayList<Names> namesList = new ArrayList<Names>();
 		namesList.add(new Names("Lebron James"));
 		namesList.add(new Names("Derrick Rose"));
