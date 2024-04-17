@@ -3,8 +3,9 @@ package fr.fiducial.exercise.service;
 import static java.time.Instant.now;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.tuple;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyIterable;
 import static org.mockito.Mockito.times;
@@ -45,17 +46,19 @@ class NamesServiceUnitTest {
 	@DisplayName("Should retrieve all names with default parameters")
 	void getAllNames() throws NameException, DuplicatedNameException {
 		ArrayList<Names> namesList = new ArrayList<Names>();
-		namesList.add(new Names("Lebron James", now()));
-		namesList.add(new Names("Derrick Rose", now()));
-		this.namesService.saveAll(namesList);
+		namesList.add(new Names("Lebron James"));
+		namesList.add(new Names("Derrick Rose"));
 
-		when(this.namesRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(namesList));
+		when(this.namesRepository.findAll(any(Pageable.class)))
+			.thenReturn(new PageImpl<>(namesList));
 
 		var values = this.namesService.listNames(of(0, 3, by("name"))).toList();
-
-		assertThat(values).hasSize(2);
-		assertThat(values.get(0).getName()).isEqualToIgnoringCase("Lebron James");
-		assertThat(values.get(1).getName()).isEqualToIgnoringCase("Derrick Rose");
+		verify(this.namesRepository, times(1)).findAll(any(Pageable.class));
+		
+		assertThat(values)
+		.hasSize(2)
+		.extracting("name")
+		.containsExactly("Lebron James", "Derrick Rose");
 	}
 
 	@Test
@@ -87,8 +90,8 @@ class NamesServiceUnitTest {
 	@DisplayName("Should save the names with default parameters")
 	public void testsaveAllName() throws DuplicatedNameException, NameException {
 		ArrayList<Names> namesList = new ArrayList<Names>();
-		namesList.add(new Names("Lebron James", now()));
-		namesList.add(new Names("Derrick Rose", now()));
+		namesList.add(new Names("Lebron James"));
+		namesList.add(new Names("Derrick Rose"));
 		this.namesService.saveAll(namesList);
 
 		when(this.namesRepository.saveAll(anyIterable())).thenReturn(namesList);
@@ -96,25 +99,15 @@ class NamesServiceUnitTest {
 		verify(this.namesRepository, times(1)).saveAll(anyIterable());
 
 		ArgumentCaptor<Iterable<Names>> namesCaptor = ArgumentCaptor.forClass(Iterable.class);
-		verify(this.namesRepository).saveAll(namesCaptor.capture());
+		verify(this.namesRepository, times(1)).saveAll(namesCaptor.capture());
 
-		List<Iterable<Names>> values = namesCaptor.getAllValues();
-
-		int i = 0;
-		var it = values.get(0).iterator();
-		while (it.hasNext()) {			
-			assertThat(it.next().getName())
-				.isNotNull()
-				.matches(namesList.get(i).getName()::equalsIgnoreCase);			
-			i++;
-		}
-
-//		assertThat(values).hasSize(1).element(0)
-//				.matches(x -> x.iterator().next().getName().equalsIgnoreCase("Lebron James"));
-
-//		assertThat(values).allSatisfy(value -> {
-//			assertThat(value.iterator().next().getName()).isEqualToIgnoringCase("Derrick Rose");
-//		});
+		var values = namesCaptor.getAllValues();
+		
+		 assertThat(values.get(0))
+			 .hasSize(2)
+			 .extracting("name")
+			 .asList()
+			 .containsExactly("lebron james", "derrick rose");
 	}
 
 	@Test
@@ -123,7 +116,8 @@ class NamesServiceUnitTest {
 		var name = new Names(1L, "latrell sprewell", now());
 		when(this.namesRepository.findAll()).thenReturn(Arrays.asList(name));
 		var nameExists = this.namesService.nameExists(name.getName());
-		assertTrue(nameExists);
+		verify(this.namesRepository, times(1)).findAll();
+		assertThat(nameExists).isTrue();
 	}
 
 	@Test
@@ -132,6 +126,6 @@ class NamesServiceUnitTest {
 		var name = new Names(100L, "Lebron James", now());
 		when(this.namesRepository.findByName(any(String.class))).thenReturn(name);
 		assertThatNoException().isThrownBy(() -> this.namesService.deleteByName(name.getName()));
-		verify(this.namesRepository, times(1)).deleteById(name.getId());		
+		verify(this.namesRepository, times(1)).deleteById(name.getId());
 	}
 }
