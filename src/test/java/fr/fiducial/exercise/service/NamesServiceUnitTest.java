@@ -40,7 +40,7 @@ class NamesServiceUnitTest {
 
 	@Test
 	@DisplayName("Should retrieve all names with default parameters")
-	void testGetAllNames() throws NameException, DuplicatedNameException {
+	void testGetAllNames() {
 		ArrayList<Names> namesList = new ArrayList<Names>();
 		namesList.add(new Names("Lebron James"));
 		namesList.add(new Names("Derrick Rose"));
@@ -59,7 +59,7 @@ class NamesServiceUnitTest {
 
 	@Test
 	@DisplayName("Should save the name with default parameters")
-	void testsaveName() throws DuplicatedNameException {
+	void testsaveName() throws DuplicatedNameException  {
 		var name = new Names(1L, "Lebron James", now());
 		this.namesService.save(name);
 
@@ -84,7 +84,7 @@ class NamesServiceUnitTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	@DisplayName("Should save the names with default parameters")
-	void testsaveAllName() throws DuplicatedNameException, NameException {
+	void testsaveAllName() throws NameException, DuplicatedNameException {
 		ArrayList<Names> namesList = new ArrayList<Names>();
 		namesList.add(new Names("Lebron James"));
 		namesList.add(new Names("Derrick Rose"));
@@ -118,7 +118,7 @@ class NamesServiceUnitTest {
 
 	@Test
 	@DisplayName("Should delete name")
-	void whenAssetsDeletedByName_thenControlFlowAsExpected() throws NameException {
+	void whenAssetsDeletedByName_thenControlFlowAsExpected() {
 		var name = new Names(100L, "Lebron James", now());
 		when(this.namesRepository.findByName(any(String.class))).thenReturn(name);
 		assertThatNoException().isThrownBy(() -> this.namesService.deleteByName(name.getName()));
