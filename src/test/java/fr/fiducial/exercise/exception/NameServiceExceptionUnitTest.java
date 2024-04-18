@@ -14,7 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import fr.fiducial.exercise.service.NamesServiceImpl;
 
 @ExtendWith(SpringExtension.class)
-class NameServiceExceptionTest {
+class NameServiceExceptionUnitTest {
 
 	@Mock
 	private NamesServiceImpl namesService;
