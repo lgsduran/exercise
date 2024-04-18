@@ -12,7 +12,7 @@ import org.modelmapper.ModelMapper;
 import fr.fiducial.exercise.entity.Names;
 
 @TestMethodOrder(OrderAnnotation.class)
-class NameDtoTest {
+class NameDtoUnitTest {
 
 	private ModelMapper modelMapper = new ModelMapper();
 
