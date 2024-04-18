@@ -3,6 +3,7 @@ package fr.fiducial.exercise.dto;
 import static java.time.Instant.now;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ class NameDtoUnitTest {
 
 	@Test
 	@Order(1)
+	@DisplayName("Should convert NameEntity To NameDto")
 	void testConvertNameEntityToNameDto() {
 		var name = new NamesDto(1L, "luiz", now());
 		var nameDto = modelMapper.map(name, NamesDto.class);
@@ -28,6 +30,7 @@ class NameDtoUnitTest {
 	
 	@Test
 	@Order(2)
+	@DisplayName("Should convert NameDto To NameEntity")
 	void testConvertNameDtoToNameEntity() {
 		var name = new Names();
 		name.setId(1L);

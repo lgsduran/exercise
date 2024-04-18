@@ -18,6 +18,13 @@ public class NamesDto {
 		this.id = id;
 		this.name = name;
 		this.created_At = created_At;
+	}	
+
+	/**
+	 * @param name
+	 */
+	public NamesDto(String name) {
+		this.name = name;
 	}
 
 	/**
