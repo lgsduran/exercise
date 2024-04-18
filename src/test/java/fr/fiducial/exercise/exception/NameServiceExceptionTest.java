@@ -2,13 +2,13 @@ package fr.fiducial.exercise.exception;
 
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import fr.fiducial.exercise.service.NamesServiceImpl;
@@ -29,7 +29,7 @@ class NameServiceExceptionTest {
 			  this.namesService.saveAll(any());
 		});
 	}
-	
+
 	@Test
 	@DisplayName("Invoking SaveAll should throw NameException")
 	void testSaveAll_NameException() throws NameException, DuplicatedNameException {
@@ -40,7 +40,7 @@ class NameServiceExceptionTest {
 			  this.namesService.saveAll(any());
 		});
 	}
-	
+
 	@Test
 	@DisplayName("Invoking Save should throw DuplicatedNameException")
 	void testSave_NameException() throws DuplicatedNameException {
@@ -51,14 +51,15 @@ class NameServiceExceptionTest {
 			  this.namesService.save(any());
 		});
 	}
-	
+
 	@Test
 	@DisplayName("Invoking Save should throw DuplicatedNameException")
-	void testDeleteByName_NameException() throws NameException {	
-		Mockito.doThrow(NameException.class).when(this.namesService).deleteByName(any());
+	void testDeleteByName_NameException() throws NameException {
+		doThrow(NameException.class).when(this.namesService).deleteByName(any());
+		
 		assertThatExceptionOfType(NameException.class)
-		  .isThrownBy(() -> {
-			  this.namesService.deleteByName(any());
+			.isThrownBy(() -> {
+				this.namesService.deleteByName(any());
 		});
 	}
 }
