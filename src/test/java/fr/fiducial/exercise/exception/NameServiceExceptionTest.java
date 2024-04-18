@@ -53,7 +53,7 @@ class NameServiceExceptionTest {
 	}
 
 	@Test
-	@DisplayName("Invoking Save should throw DuplicatedNameException")
+	@DisplayName("Invoking DeleteByName should throw DuplicatedNameException")
 	void testDeleteByName_NameException() throws NameException {
 		doThrow(NameException.class).when(this.namesService).deleteByName(any());
 		
