@@ -87,7 +87,8 @@ public class NameControllerUnitTest {
 		Page<Names> pagedResponse = new PageImpl(namesList);
 		when(this.namesService.listNames(any())).thenReturn(pagedResponse);
 
-		mockMvc.perform(MockMvcRequestBuilders.get("/api/names/").contentType(MediaType.APPLICATION_JSON))
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/names/")
+				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is2xxSuccessful())
 				.andExpect(jsonPath("$.content.[0].name", is(namesList.get(0).getName())));
 	}
@@ -97,7 +98,7 @@ public class NameControllerUnitTest {
 	void NamesController_NameExists_ReturnTrue() throws Exception {
 		when(this.namesService.nameExists(any())).thenReturn(true);
 		
-		mockMvc.perform(MockMvcRequestBuilders.get("/api/names/Lebron James")
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/names/{name}", namesDto.getName())
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is2xxSuccessful())				
 				.andExpect(jsonPath("$", is(true)));
@@ -108,7 +109,7 @@ public class NameControllerUnitTest {
 	void NamesController_NameExists_ReturnFalse() throws Exception {
 		when(this.namesService.nameExists(any())).thenReturn(false);
 		
-		mockMvc.perform(MockMvcRequestBuilders.get("/api/names/Lebron James")
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/names/{name}", "ozzy")
 				.contentType(MediaType.APPLICATION_JSON))	
 				.andExpect(status().is2xxSuccessful())				
 				.andExpect(jsonPath("$", is(false)));
