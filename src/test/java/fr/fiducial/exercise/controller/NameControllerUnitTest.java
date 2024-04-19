@@ -3,15 +3,17 @@ package fr.fiducial.exercise.controller;
 import static java.time.Instant.now;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -42,11 +44,10 @@ public class NameControllerUnitTest {
 
 	@Test
 	@DisplayName("Should save nameDto")
-	void NamesController_saveName_ReturnNamesDto() throws JsonProcessingException, Exception {
-		
-		var namesDto = new NamesDto(1L, "Lebron James", now());
+	void NamesController_saveName_ReturnNamesDto() throws JsonProcessingException, Exception {	
+		var namesDto = new NamesDto(2L, "Lebron James", now());
 
-		when(this.namesService.save(Mockito.any())).thenReturn(namesDto);
+		when(this.namesService.save(any())).thenReturn(namesDto);
 
 		ResultActions response = mockMvc.perform(post("/api/names/addName").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(namesDto)));
@@ -55,6 +56,22 @@ public class NameControllerUnitTest {
 				.andExpect(jsonPath("$.id", is(longToIntCast(namesDto.getId()))))
 				.andExpect(jsonPath("$.name", is(namesDto.getName())))
 				.andExpect(jsonPath("$.created_At", notNullValue()));
+	}
+	
+	@Test
+	@DisplayName("Should saveAll nameDto")
+	void NamesController_saveAllName_ReturnNamesDto() throws JsonProcessingException, Exception {
+		ArrayList<NamesDto> namesList = new ArrayList<>();
+		namesList.add(new NamesDto(1L, "Lebron James", now()));
+
+		when(this.namesService.saveAll(any())).thenReturn(namesList);
+
+		ResultActions response = mockMvc.perform(post("/api/names/addNames")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(namesList)));
+
+		response.andExpect(status().isCreated())				
+				.andExpect(jsonPath("$.[0].name", is(namesList.get(0).getName())));
 	}
 
 	private int longToIntCast(long number) {
