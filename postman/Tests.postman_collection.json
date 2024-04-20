@@ -277,22 +277,37 @@
 			"name": "AddNames",
 			"event": [
 				{
-					"listen": "prerequest",
+					"listen": "test",
 					"script": {
 						"exec": [
-							""
+							"let all = [];",
+							"let ids = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"function getIds() {",
+							"    if (ids.length > 0) {",
+							"        ids.forEach(id => { all.push('\"' + id.id + '\"')});",
+							"    } else {",
+							"        pm.expect.fail(\"Erro ao retornar hora de agendamento\");",
+							"    }",
+							"",
+							"    return all;",
+							"}",
+							"",
+							"pm.globals.set(\"ids\", getIds());"
 						],
 						"type": "text/javascript",
 						"packages": {}
 					}
 				},
 				{
-					"listen": "test",
+					"listen": "prerequest",
 					"script": {
 						"exec": [
-							"pm.test(\"Successful POST request\", function () {",
-							"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
-							"});"
+							""
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -320,6 +335,48 @@
 						"api",
 						"names",
 						"addNames"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteAllByIds",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[{{ids}}]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/names/deleteAllByIds",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"names",
+						"deleteAllByIds"
 					]
 				}
 			},

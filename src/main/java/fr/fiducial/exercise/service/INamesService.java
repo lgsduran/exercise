@@ -22,5 +22,7 @@ public interface INamesService {
 	Boolean nameExists(String name);
 	
 	void deleteByName(String name) throws NameException;
+	
+	void deleteAllById(ArrayList<Long> ids);
 
 }

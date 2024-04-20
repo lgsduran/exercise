@@ -2,6 +2,7 @@ package fr.fiducial.exercise.controller;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,5 +76,11 @@ public class NameController {
 	void deleteName(@PathVariable String name) throws NameException {
 		this.namesServiceImpl.deleteByName(name);
 	}
-
+	
+	@Operation(summary = "Delete an array of ids")
+	@DeleteMapping("/deleteAllByIds")
+	@Transactional
+	void deleteAllByIds(@Valid @RequestBody ArrayList<Long> ids) {
+		this.namesServiceImpl.deleteAllById(ids);	
+	}
 }

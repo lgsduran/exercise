@@ -147,5 +147,15 @@ public class NamesServiceImpl implements INamesService {
 		
 		// Return dto		
 		return conUtils.convertToList(uniqueNames, u -> new NamesDto(u.getId(), u.getName(), u.getCreatedAt()));
-	}	
+	}
+
+	@Override
+	@Transactional
+	public void deleteAllById(ArrayList<Long> ids) {
+		this.namesRepository.deleteAllById(ids);		
+	}
+
+
+	
+	
 }
