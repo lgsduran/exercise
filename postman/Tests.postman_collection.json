@@ -1,0 +1,335 @@
+{
+	"info": {
+		"_postman_id": "9f27b7bc-ef08-449d-8ace-9e471cd552f3",
+		"name": "Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11559521"
+	},
+	"item": [
+		{
+			"name": "AddName",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//Fist Name Generator",
+							"function firstName (){",
+							"",
+							"    var fistName = [\"Agda\", \"Andréia\", \"André\", \"Adriano\", \"Abinadar\", \"Alice\", \"Ariana\", \"Alencar\", \"Alcemir\", \"Aline\", \"Américo\",\"Ariane\", \"Bruno\", \"Bruna\",\"Beatriz\", \"Berenice\", \"Benedito\", \"Benedita\", \"Carlos\", \"Camila\", \"Caroline\",\"Camilo\", \"Ceverino\", \"Denis\", \"Denise\",\"Daniel\", \"Dorivaldo\", \"Darley\", \"Edson\", \"Eliane\",\"Eliana\", \"Ester\", \"Everaldo\", \"Elias\", \"Estenio\", \"Etevaldo\", \"Euclides\", \"Eliezer\", \"Everaldo\", \"Eduardo\", \"Emanuel\", \"Eunice\", \"Elaine\", \"Jaqueline\", \"Josivaldo\", \"josefina\", \"Larissa\",\"Laís\", \"Laercío\", \"Leandro\", \"Lucas\", \"Maria\", \"Marcos\", \"Melissa\", \"Marcelo\", \"Mariana\", \"Matheus\",\"Milena\", \"Neilson\", \"Naiara\", \"Nilson\", \"Nerivaldo\", \"Noemia\",\"Núbia\", \"Nilvan\", \"Olavo\", \"Oliver\",\"Olindo\", \"Paulo\", \"Paula\", \"Pedro\", \"Pedrina\", \"Pivanne\", \"Patrícia\", \"Quelvin\", \"Queila\", \"Ronaldo\",\"Ronan\", \"Romildo\", \"Rodolfo\", \"Rita\", \"Ravier\", \"Romã\", \"Salivan\", \"Selton\", \"Simirá\", \"Tadeu\",\"Taís\",\"Tamilá\", \"Tadeu\", \"Telma\", \"Ulisson\", \"Umberto\", \"Vicente\", \"Vanice\", \"Vera\", \"Valdermor\", \"Zulmira\",\"Zenira\"];",
+							"",
+							"    var randomItem = fistName[Math.floor(Math.random()*fistName.length)];",
+							"    return randomItem;",
+							"}",
+							"",
+							"pm.globals.set(\"firstName\", firstName());"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+							"});",
+							"",
+							"pm.test(\"Created\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.name).to.eql(pm.globals.get(\"firstName\").toLowerCase())",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{firstName}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/names/addName",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"names",
+						"addName"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddName Duplicated",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Duplicated\", function () {",
+							"    let jsonData = pm.response.json();",
+							"    let name = pm.globals.get(\"firstName\");",
+							"    pm.expect(jsonData.message).to.eql(`Name ${name} is duplicated`)",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{firstName}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/names/addName",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"names",
+						"addName"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "NameExists",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"True\", function () {",
+							"    let jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.eql(true);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/names/{{firstName}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"names",
+						"{{firstName}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteName",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/names/{{firstName}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"names",
+						"{{firstName}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "NameNotFound",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/names/{{firstName}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"names",
+						"{{firstName}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "NameNotExists",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"False\", function () {",
+							"    let jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.eql(false);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/names/{{firstName}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"names",
+						"{{firstName}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddNames",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    \"{{$randomFirstName}}\",\r\n    \"{{$randomFirstName}}\",\r\n    \"{{$randomFirstName}}\"\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/names/addNames",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"names",
+						"addNames"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8081"
+		}
+	]
+}
