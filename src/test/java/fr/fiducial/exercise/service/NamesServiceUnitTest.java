@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyIterable;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -13,6 +14,7 @@ import static org.springframework.data.domain.Sort.by;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -104,6 +106,19 @@ class NamesServiceUnitTest {
 			 .extracting("name")
 			 .asList()
 			 .containsExactly("lebron james", "derrick rose");
+	}
+	
+	@Test
+	@DisplayName("Should delete by ids")
+	void testDeleteAllByIds() {
+		var lebron = new Names(1L, "Lebron James", now());
+		var michael = new Names(2L, "Michael Jordan", now());		
+		ArrayList<Long> ids = new ArrayList<Long>();
+		ids.add(lebron.getId());
+		ids.add(michael.getId());
+		doNothing().when(this.namesRepository).deleteAllById(anyIterable());
+		this.namesService.deleteAllById(ids);
+		verify(this.namesRepository, times(1)).deleteAllById(ids);
 	}
 
 	@Test
