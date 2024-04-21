@@ -124,6 +124,18 @@ public class NameControllerUnitTest {
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is2xxSuccessful());
 	}
+	
+	@Test
+	@DisplayName("Should delete by ids name")
+	void NameController_DeleteAllByIds_ReturnOk() throws Exception {
+		ArrayList<Long> arrayList = new ArrayList<Long>();
+		arrayList.add(namesList.get(0).getId());
+		doNothing().when(this.namesService).deleteAllById(arrayList);
+
+		mockMvc.perform(delete("/api/names/deleteAllByIds{id}", arrayList)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().is2xxSuccessful());
+	}
 
 	private int longToIntCast(long number) {
 		return (int) number;
