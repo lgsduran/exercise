@@ -1,16 +1,14 @@
-version: '3.8'
-
 services:
-  mariadb:
+  db:
     container_name: mariadb
     image: mariadb
     restart: always
     environment:
       MARIADB_ROOT_PASSWORD: root
     ports:
-      - '3306:3306'
+      - 3306:3306
     networks:
-      - fiducial-net
+      - exercisenet
     healthcheck:
       interval: 30s
       retries: 3
@@ -23,8 +21,20 @@ services:
           "--innodb_initialized"
         ]
       timeout: 30s
-      
+
+  backend:    
+    build: .
+    container_name: exercise
+    image: exercise
+    environment:
+      DATABASE_HOST: db
+    ports:  
+      - 8081:8081 
+    networks:
+      - exercisenet
+    depends_on:
+      - db
+
 networks:
-  fiducial-net:
+  exercisenet:
     driver: bridge
-    name: fiducial-net
