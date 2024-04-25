@@ -13,7 +13,10 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
+							"pm.test(\"Stops running collection if api is not up & running\", function () {",
+							"    if(pm.response.code !== 200) ",
+							"        postman.setNextRequest(null)",
+							"",
 							"    pm.response.to.have.status(200);",
 							"});"
 						],
