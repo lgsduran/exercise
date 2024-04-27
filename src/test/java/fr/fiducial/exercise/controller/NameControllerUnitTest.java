@@ -60,7 +60,8 @@ public class NameControllerUnitTest {
 	void NamesController_saveName_ReturnNamesDto() throws Exception {	
 		when(this.namesService.save(any())).thenReturn(namesDto);
 
-		mockMvc.perform(post("/api/names/addName").contentType(MediaType.APPLICATION_JSON)
+		mockMvc.perform(post("/api/names/addName")
+				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(namesDto)))
 				.andExpect(status().is2xxSuccessful())
 				.andExpect(jsonPath("$.id", is(longToIntCast(namesDto.getId()))))
@@ -120,7 +121,7 @@ public class NameControllerUnitTest {
 	void NameController_DeleteName_ReturnOk() throws Exception {
 		doNothing().when(this.namesService).deleteByName(namesDto.getName());
 
-		mockMvc.perform(delete("/api/names/Lebron James")
+		mockMvc.perform(delete("/api/names/{name}", "Lebron James")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is2xxSuccessful());
 	}
@@ -132,8 +133,9 @@ public class NameControllerUnitTest {
 		arrayList.add(namesList.get(0).getId());
 		doNothing().when(this.namesService).deleteAllById(arrayList);
 
-		mockMvc.perform(delete("/api/names/deleteAllByIds{id}", arrayList)
-				.contentType(MediaType.APPLICATION_JSON))
+		mockMvc.perform(delete("/api/names/deleteAllByIds")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(arrayList)))
 				.andExpect(status().is2xxSuccessful());
 	}
 
