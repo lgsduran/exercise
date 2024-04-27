@@ -1,19 +1,12 @@
 FROM eclipse-temurin:17-jdk-alpine as build
-
-RUN apk update && \ 
-    apk add --no-cache \
-    maven \
-    libgconf-2-4 \
-    wget \
-    curl \
-    sudo
      
 WORKDIR /workspace/app
 
+COPY --chmod=0755 mvnw mvnw
+COPY .mvn/ .mvn/
 COPY src src
 COPY pom.xml .
 
-RUN mvn wrapper:wrapper
 RUN ./mvnw install -DskipTests
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 

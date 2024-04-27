@@ -9,6 +9,9 @@ services:
       - 3306:3306
     networks:
       - exercisenet
+    profiles:
+      - all
+      - db
     healthcheck:
       interval: 30s
       retries: 3
@@ -24,16 +27,20 @@ services:
 
   backend:    
     build: .
-    container_name: exercise
-    image: exercise
+    container_name: backend
+    image: backend
+    profiles: 
+      - all
+      - backend
     environment:
       DATABASE_HOST: db
     ports:  
       - 8081:8081 
     networks:
       - exercisenet
-    depends_on:
-      - db
+#    depends_on:
+#      db:
+#        condition: service_healthy
 
 networks:
   exercisenet:
