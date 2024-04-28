@@ -85,9 +85,9 @@ public class NameRepositoryTest {
 		var firstRound = namesRepository.findAll();
 		
 		assertThat(firstRound)
-		.hasSize(2)
-		.extracting("name")
-		.containsExactly("Lionel Messi", "Michael Jordan");
+			.hasSize(2)
+			.extracting("name")
+			.containsExactly("Lionel Messi", "Michael Jordan");
 
 		var secondRound = namesRepository.findAll();
 		var ids = new ArrayList<Long>();
