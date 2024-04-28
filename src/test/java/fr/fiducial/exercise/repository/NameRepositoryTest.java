@@ -61,10 +61,10 @@ public class NameRepositoryTest {
 	@Order(3)
 	@DisplayName("Should delete by name")
 	public void testDeleteByName() {
-		Names lebron = new Names("Lebron James", now());
-		namesRepository.save(lebron);
-		namesRepository.deleteByName(lebron.getName().toLowerCase());
-		var finalResult = namesRepository.findById(lebron.getId());
+		Names ozzy = new Names("Ozzy Osbourne", now());
+		namesRepository.save(ozzy);
+		namesRepository.deleteByName(ozzy.getName().toLowerCase());
+		var finalResult = namesRepository.findById(ozzy.getId());
 		assertThat(finalResult.isEmpty()).isTrue();
 	}
 
