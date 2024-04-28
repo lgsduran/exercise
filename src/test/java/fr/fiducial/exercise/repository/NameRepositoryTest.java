@@ -4,7 +4,6 @@ import static java.time.Instant.now;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -76,21 +75,21 @@ public class NameRepositoryTest {
 
 	@Test
 	@Order(4)
-	@DisplayName("Should delete all by ids")
+	@DisplayName("Should save all names and delete all by ids")
 	public void testSaveAllAndDeleteByIds() {
 		var namesList = new ArrayList<Names>();
 		namesList.add(new Names("Lionel Messi", now()));
 		namesList.add(new Names("Michael Jordan", now()));
 
 		namesRepository.saveAll(namesList);
-		List<Names> firstRound = namesRepository.findAll();
+		var firstRound = namesRepository.findAll();
 		
 		assertThat(firstRound)
 		.hasSize(2)
 		.extracting("name")
 		.containsExactly("Lionel Messi", "Michael Jordan");
 
-		List<Names> secondRound = namesRepository.findAll();
+		var secondRound = namesRepository.findAll();
 		var ids = new ArrayList<Long>();
 		secondRound.forEach(id -> ids.add(id.getId()));
 		namesRepository.deleteAllById(ids);
