@@ -40,7 +40,7 @@ public class NameRepositoryTest {
 
 	@Test
 	@Order(1)
-	@DisplayName("Should verify that id exists")
+	@DisplayName("Should save name and verify that id exists")
 	public void testSaveNameAndFindById() {
 		Names lebron = new Names("Lebron James", now());
 		namesRepository.save(lebron);
