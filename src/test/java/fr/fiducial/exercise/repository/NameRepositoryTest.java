@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -32,6 +33,11 @@ public class NameRepositoryTest {
 	@Container
 	@ServiceConnection
 	static MariaDBContainer<?> mariadb = new MariaDBContainer<>("mariadb:latest");
+	
+	@BeforeEach
+	public void setUp() {
+		namesRepository.deleteAll();
+	}
 
 	@Test
 	@Order(1)
@@ -71,16 +77,22 @@ public class NameRepositoryTest {
 	@Test
 	@Order(4)
 	@DisplayName("Should delete all by ids")
-	public void testDeleteByIds() {
+	public void testSaveAllAndDeleteByIds() {
 		var namesList = new ArrayList<Names>();
 		namesList.add(new Names("Lionel Messi", now()));
 		namesList.add(new Names("Michael Jordan", now()));
 
 		namesRepository.saveAll(namesList);
+		List<Names> firstRound = namesRepository.findAll();
+		
+		assertThat(firstRound)
+		.hasSize(2)
+		.extracting("name")
+		.containsExactly("Lionel Messi", "Michael Jordan");
 
-		List<Names> all = namesRepository.findAll();
+		List<Names> secondRound = namesRepository.findAll();
 		var ids = new ArrayList<Long>();
-		all.forEach(id -> ids.add(id.getId()));
+		secondRound.forEach(id -> ids.add(id.getId()));
 		namesRepository.deleteAllById(ids);
 
 		var result = namesRepository.findAllById(ids).stream().findAny();
