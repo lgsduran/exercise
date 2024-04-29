@@ -25,6 +25,15 @@ public class NamesDto {
 	 */
 	public NamesDto(String name) {
 		this.name = name;
+	}	
+
+	/**
+	 * @param name
+	 * @param created_At
+	 */
+	public NamesDto(String name, Instant created_At) {
+		this.name = name;
+		this.created_At = created_At;
 	}
 
 	/**
