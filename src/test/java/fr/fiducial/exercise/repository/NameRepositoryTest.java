@@ -55,10 +55,10 @@ public class NameRepositoryTest {
 	@Order(2)
 	@DisplayName("Should verify that name exists")
 	public void testFindByName() {
-		Names lebron = new Names("Mike Tyson", now());
-		namesRepository.save(lebron);
-		Names resultName = namesRepository.findByName(lebron.getName());
-		assertThat(resultName.getName()).isNotNull().matches(lebron.getName()::equalsIgnoreCase);
+		Names mike = new Names("Mike Tyson", now());
+		namesRepository.save(mike);
+		Names resultName = namesRepository.findByName(mike.getName());
+		assertThat(resultName.getName()).isNotNull().matches(mike.getName()::equalsIgnoreCase);
 	}
 
 	@Test
@@ -77,11 +77,11 @@ public class NameRepositoryTest {
 	@Order(4)
 	@DisplayName("Should save all names and delete all by ids")
 	public void testSaveAllAndDeleteByIds() {
-		var namesList = new ArrayList<Names>();
-		namesList.add(new Names("Lionel Messi", now()));
-		namesList.add(new Names("Michael Jordan", now()));
+		var nameList = new ArrayList<Names>();
+		nameList.add(new Names("Lionel Messi", now()));
+		nameList.add(new Names("Michael Jordan", now()));
 
-		namesRepository.saveAll(namesList);
+		namesRepository.saveAll(nameList);
 		var firstRound = namesRepository.findAll();
 		
 		assertThat(firstRound)
