@@ -17,21 +17,29 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.testcontainers.containers.MariaDBContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import fr.fiducial.exercise.entity.Names;
 import fr.fiducial.exercise.exception.DuplicatedNameException;
 import fr.fiducial.exercise.exception.NameException;
 import fr.fiducial.exercise.repository.NamesRepository;
 
-@ExtendWith(SpringExtension.class)
+@Testcontainers
+@SpringBootTest
 class NamesServiceUnitTest {
+	
+	@Container
+	@ServiceConnection
+	static MariaDBContainer<?> mariadb = new MariaDBContainer<>("mariadb:latest");
 
 	@Mock
 	private NamesRepository namesRepository;

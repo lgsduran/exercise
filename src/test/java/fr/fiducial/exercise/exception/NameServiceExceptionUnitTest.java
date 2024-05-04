@@ -7,19 +7,25 @@ import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.testcontainers.containers.MariaDBContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import fr.fiducial.exercise.service.NamesServiceImpl;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
+@Testcontainers
 class NameServiceExceptionUnitTest {
 
 	@Mock
 	private NamesServiceImpl namesService;
+	
+	@Container
+	@ServiceConnection
+	static MariaDBContainer<?> mariadb = new MariaDBContainer<>("mariadb:latest");
 
 	@Test
 	@DisplayName("Invoking SaveAll should throw DuplicatedNameException")
