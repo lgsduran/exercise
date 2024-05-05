@@ -5,9 +5,8 @@ pipeline {
             steps {
 
                     sh '''docker run \
-                          -e DOCKER_HOST=tcp://docker:2376 \
+                          docker:dind \
                           -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal \
-                          -e DOCKER_CERT_PATH=/certs/client \
                           -e DOCKER_TLS_VERIFY=1 \
                           -i \
                           --rm \
