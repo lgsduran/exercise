@@ -4,8 +4,8 @@ pipeline {
         stage("Unit Testing") {
             steps {
 
-                    sh '''docker run \                        
-                          --network=host
+                    sh '''docker run \
+                          --network=host \
                           -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal \
                           -i \
                           --rm \
