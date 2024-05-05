@@ -22,6 +22,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.testcontainers.containers.MariaDBContainer;
@@ -35,6 +36,7 @@ import fr.fiducial.exercise.repository.NamesRepository;
 
 @Testcontainers
 @SpringBootTest
+@Configuration
 class NamesServiceUnitTest {
 	
 	@Container
