@@ -1,9 +1,9 @@
 pipeline {
-    agent none
+
     stages {
         stage("Unit Testing") {
             steps {
-                
+
                     sh '''docker run \
                           -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal \
                           -it \
