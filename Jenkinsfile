@@ -5,17 +5,16 @@ pipeline {
             steps {
 
                     sh '''docker run \
+                          -d
+                          --network=host
                           -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal \
                           -i \
                           --rm \
-                          --net jenkins \
                           -v $PWD:$PWD \
                           -w $PWD \
                           -v /var/run/docker.sock:/var/run/docker.sock \
                           maven:latest \
-                          mvn verify \
-                          docker:dind \
-                          --storage-driver overlay2'''
+                          mvn verify'''
                 
             }
         }
