@@ -8,6 +8,7 @@ pipeline {
                           -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal \
                           -i \
                           --rm \
+                          --network jenkins \
                           -v $PWD:$PWD \
                           -w $PWD \
                           -v /var/run/docker.sock:/var/run/docker.sock \
