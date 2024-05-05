@@ -20,7 +20,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.data.domain.PageImpl;
@@ -36,7 +35,6 @@ import fr.fiducial.exercise.repository.NamesRepository;
 
 @Testcontainers
 @SpringBootTest
-@AutoConfigureMockMvc
 class NamesServiceUnitTest {
 	
 	@Container
