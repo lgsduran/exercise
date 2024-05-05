@@ -5,7 +5,6 @@ pipeline {
             steps {
 
                     sh '''docker run \
-                          docker:dind \
                           -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal \
                           -e DOCKER_TLS_VERIFY=1 \
                           -i \
