@@ -13,7 +13,9 @@ pipeline {
                           -w $PWD \
                           -v /var/run/docker.sock:/var/run/docker.sock \
                           maven:latest \
-                          mvn verify'''
+                          mvn verify \
+                          docker:dind \
+                          --storage-driver overlay2'''
                 
             }
         }
