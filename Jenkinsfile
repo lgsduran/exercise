@@ -4,7 +4,7 @@ pipeline {
         stage("Unit Testing") {
             steps {
 
-                    sh '''docker run \                         
+                    sh '''docker run \
                           -i \
                           --rm \
                           --network jenkins \
