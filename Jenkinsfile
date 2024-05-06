@@ -4,8 +4,7 @@ pipeline {
         stage("Unit Testing") {
             steps {
 
-                    sh '''docker run \
-                          -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal \
+                    sh '''docker run \                         
                           -i \
                           --rm \
                           --network jenkins \
