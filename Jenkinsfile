@@ -3,7 +3,6 @@ pipeline {
     stages {
         stage("Unit Testing") {
             steps {
-
                     sh '''docker run \
                           -i \
                           --rm \
@@ -11,8 +10,7 @@ pipeline {
                           -w $PWD \
                           -v /var/run/docker.sock:/var/run/docker.sock \
                           maven:latest \
-                          mvn verify'''
-                
+                          mvn verify'''                
             }
         }
     }
