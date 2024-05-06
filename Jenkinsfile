@@ -5,10 +5,11 @@ pipeline {
             steps {
 
                     sh '''docker run \
-                          --network jenkins
                           -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal \
                           -i \
                           --rm \
+                          --network jenkins \
+                          --network-alias docker \
                           -v $PWD:$PWD \
                           -w $PWD \
                           -v /var/run/docker.sock:/var/run/docker.sock \
