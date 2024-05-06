@@ -5,6 +5,7 @@ pipeline {
             steps {
 
                     sh '''docker run \
+                          --add-host=host.docker.internal:host-gateway
                           -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal \
                           -i \
                           --rm \
