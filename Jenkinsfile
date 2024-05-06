@@ -5,6 +5,7 @@ pipeline {
             steps {
 
                     sh '''docker run \
+                          --network jenkins
                           -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal \
                           -i \
                           --rm \
