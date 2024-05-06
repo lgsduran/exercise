@@ -5,7 +5,7 @@ pipeline {
             steps {
 
                     sh '''docker run \
-                          -e TESTCONTAINERS_HOST_OVERRIDE=docker.for.mac.host.internal \
+                          -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal \
                           -i \
                           --rm \
                           -v $PWD:$PWD \
