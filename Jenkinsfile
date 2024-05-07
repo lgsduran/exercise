@@ -4,7 +4,7 @@ pipeline {
         stage("Unit Testing") {
            agent {
             docker { 
-                image 'maven:latest'
+                image 'maven:3.9.6-eclipse-temurin-17-alpine'
                 args '-v $HOME/.m2:/root/.m2'
             }
         }
