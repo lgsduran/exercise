@@ -5,7 +5,7 @@ pipeline {
            agent {
             docker { 
                 image 'maven:latest'
-                args  '-v /var/run/docker.sock:/var/run/docker.sock'             
+                args  '-i -v /var/run/docker.sock:/var/run/docker.sock'             
 
             }
         }
