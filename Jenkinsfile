@@ -5,7 +5,10 @@ pipeline {
            agent {
             docker { 
                 image 'maven:3.9.3-eclipse-temurin-17'
-                args  '-i -v $PWD:$PWD -w $PWD -v /var/run/docker.sock:/var/run/docker.sock'
+                args  '-v $PWD:$PWD'
+                args  '-w $PWD'
+                args  '-v /var/run/docker.sock:/var/run/docker.sock'             
+
             }
         }
       steps {
