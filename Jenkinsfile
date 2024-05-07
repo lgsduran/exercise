@@ -10,12 +10,14 @@ pipeline {
             }
         }
       steps {
-        sh '  -i \
+        sh '''
+              -i \
               --rm \
               -v $PWD:$PWD \
               -w $PWD \
               -v /var/run/docker.sock:/var/run/docker.sock \
-              mvn verify'
+              mvn verify
+              '''
       }
         }
     }
