@@ -10,7 +10,8 @@ pipeline {
                         -i \
                         --rm \
                         -w $PWD \
-                        -v /var/run/docker.sock:/var/run/docker.sock
+                        -v /var/run/docker.sock:/var/run/docker.sock \
+                        -v /var/jenkins_home/workspace/exercise:/var/jenkins_home/workspace/exercise
                         '''             
 
             }
