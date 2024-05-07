@@ -10,7 +10,7 @@ pipeline {
             }
         }
       steps {
-        sh ' '-i \
+        sh '  -i \
               --rm \
               -v $PWD:$PWD \
               -w $PWD \
