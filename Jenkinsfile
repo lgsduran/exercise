@@ -4,9 +4,13 @@ pipeline {
         stage("Unit Testing") {
            agent {
             docker { 
-                image 'maven:3'                
+                image 'maven:3.9.6-eclipse-temurin-17-alpine'                
 
-                args '-v /var/run/docker.sock:/var/run/docker.sock'             
+                args '-i \
+                      --rm \
+                      -v $PWD:$PWD \
+                      -w $PWD \
+                      -v /var/run/docker.sock:/var/run/docker.sock \'             
 
             }
         }
