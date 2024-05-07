@@ -2,18 +2,15 @@ pipeline {
     agent any
     stages {
         stage("Unit Testing") {
-            steps {
-                    sh '''
-                        docker run \
-                        -i \
-                        --rm \
-                        -v $PWD:$PWD \
-                        -w $PWD \
-                        -v /var/run/docker.sock:/var/run/docker.sock \
-                        maven:latest \
-                        mvn verify
-                    '''                
+           agent {
+            docker { 
+                image 'maven:latest'
+                args  '--rm -i -v "/var/run/docker.sock:/var/run/docker.sock" "$PWD:$PWD" -w "$PWD"'
             }
+        }
+      steps {
+        sh 'mvn -B clean verify'
+      }
         }
     }
 }
