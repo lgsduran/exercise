@@ -11,10 +11,7 @@ pipeline {
             }
         }
       steps {
-        sh '''
-              echo "Running as $(whoami):$(getent group $(id -g) | cut -d: -f1) ($(id -u):$(id -g))" 
-              mvn test
-           '''
+        sh 'mvn test'
       }
         }
     }
