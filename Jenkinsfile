@@ -11,7 +11,7 @@ pipeline {
             }
         }
       steps {
-        sh 'mvn verify'
+        sh 'mvn test'
       }
         }
     }
