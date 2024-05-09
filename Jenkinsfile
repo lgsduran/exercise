@@ -10,8 +10,7 @@ pipeline {
             }
         }
       steps {
-        sh 'mvn test || true' 
-        junit allowEmptyResults: true, testResults: '**/test-results/*.xml'
+        sh 'mvn test'       
       }
         }
     }
