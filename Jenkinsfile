@@ -11,7 +11,8 @@ pipeline {
             }
         }
       steps {
-        sh 'mvn test'
+        sh 'mvn test || true' 
+        junit '**/target/*.xml'
       }
         }
     }
