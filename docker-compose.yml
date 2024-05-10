@@ -47,7 +47,7 @@ services:
       - $PWD:$PWD
       - /var/run/docker.sock:/var/run/docker.sock
       # Maven cache (optional)
-      - ~/.m2:/root/.m2
+      #- ~/.m2:/root/.m2
     #command: mvn test
 
 networks:

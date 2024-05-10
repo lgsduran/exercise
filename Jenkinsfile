@@ -20,7 +20,7 @@ pipeline {
 
     stage('Start container') {
       steps {
-        sh 'COMPOSE_PROFILES=all docker compose up -d --no-color --wait'
+        sh 'COMPOSE_PROFILES=all docker compose up -d --quiet-pull --wait'
         sh 'docker-compose ps'
       }
     }
