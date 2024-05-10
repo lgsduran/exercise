@@ -5,6 +5,6 @@ node {
                    ' -v /var/run/docker.sock:/var/run/docker.sock') 
                    { c ->      
 
-        sh 'make check'
+        sh 'mvn test'
     }
 }
