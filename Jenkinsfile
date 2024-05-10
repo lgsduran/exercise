@@ -20,8 +20,8 @@ pipeline {
 
     stage('Start container') {
       steps {
-        sh 'docker-compose -f docker-compose-net.yml up -d --no-color --wait'
-        sh 'docker-compose ps'
+        sh 'docker compose -f docker-compose-net.yml up -d --no-color --wait'
+        sh 'docker compose ps'
       }
     }
   }
