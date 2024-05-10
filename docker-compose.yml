@@ -1,0 +1,55 @@
+services:
+  db:
+    container_name: mariadb
+    image: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+    ports:
+      - 3306:3306
+    networks:
+      - exercisenet
+    profiles:
+      - all
+      - db
+    healthcheck:
+      interval: 30s
+      retries: 3
+      test:
+        [
+          "CMD",
+          "healthcheck.sh",
+          "--su-mysql",
+          "--connect",
+          "--innodb_initialized"
+        ]
+      timeout: 30s
+
+  backend:    
+    build: .
+    container_name: backend
+    image: backend
+    profiles: 
+      - all
+      - backend
+    environment:
+      DATABASE_HOST: db
+      TESTCONTAINERS_HOST_OVERRIDE: host.docker.internal
+    ports:  
+      - 8081:8081 
+    networks:
+      - exercisenet
+    stop_signal: SIGKILL
+    stdin_open: true
+    tty: true
+    working_dir: $PWD
+    volumes:
+      - $PWD:$PWD
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Maven cache (optional)
+      - ~/.m2:/root/.m2
+    #command: mvn test
+
+networks:
+  exercisenet:
+    driver: bridge
