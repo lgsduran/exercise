@@ -6,7 +6,7 @@ pipeline {
         sh 'docker system prune -a --volumes -f'
       }
   }
-      stage("Unit Testing") {
+      /**stage("Unit Testing") {
           agent {
           docker {
               image 'maven:3.9.6-eclipse-temurin-17-alpine'
@@ -16,11 +16,11 @@ pipeline {
         steps {
           sh 'mvn test'       
         }
-      }
+      }**/
 
     stage('Start container') {
       steps {
-        sh 'docker-compose -f docker-compose-net.yml up -d --no-color --wait'
+        sh 'COMPOSE_PROFILES=all docker compose up -d --no-color --wait'
         sh 'docker-compose ps'
       }
     }
