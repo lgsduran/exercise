@@ -1,22 +1,10 @@
-pipeline {
-    agent any
-    stages {
-       stage('Prune Docker data') {
-        steps {
-          sh 'docker system prune -a --volumes -f'
-        }
-    }
-        stage("Unit Testing") {
-           agent {
-            docker {
-                image 'maven:3.9.6-eclipse-temurin-17-alpine'
-                args '-e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal \
-                      -v /var/run/docker.sock:/var/run/docker.sock'
-            }
-        }
-          steps {
-            sh 'mvn test'       
-          }
-        }
+node {
+    checkout scm    
+    docker.image('maven:3.9.6-eclipse-temurin-17-alpine')
+          .withRun('-e "TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal"' +
+                   ' -v /var/run/docker.sock:/var/run/docker.sock') 
+                   { c ->      
+
+        sh 'make check'
     }
 }
