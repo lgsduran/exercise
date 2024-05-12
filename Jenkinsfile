@@ -1,28 +1,39 @@
 pipeline {
   agent any
-  stages {
-      stage('Prune Docker data') {
-      steps {
-        sh 'docker system prune -a --volumes -f'
-      }
+  environment {
+    TOMCAT_CREDS=credentials('pi-ssh-key')
+    TOMCAT_SERVER="192.168.1.48"
+    ROOT_WAR_LOCATION="/usr/local/tomcat/webapps"
+    LOCAL_WAR_DIR="build/dist"
+    WAR_FILE="app-0.1.0.war"
   }
-      /**stage("Unit Testing") {
-          agent {
-          docker {
-              image 'maven:3.9.6-eclipse-temurin-17-alpine'
-              args '-e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal'                      
+  docker {
+    image 'maven:3.9.3-eclipse-temurin-17'
+    args '-v $HOME/.m2:/root/.m2 -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal'
+  }            
+  stages {
+    stage('Build') {
+          steps {
+              sh 'mvn clean package -DskipTests'
           }
+    }
+    stage('copy the war file to the Tomcat server') {
+      steps {
+        sh '''
+          ssh -i $TOMCAT_CREDS $TOMCAT_CREDS_USR@$TOMCAT_SERVER "/usr/local/tomcat/bin/catalina.sh stop"
+          ssh -i $TOMCAT_CREDS $TOMCAT_CREDS_USR@$TOMCAT_SERVER "rm -rf $ROOT_WAR_LOCATION/ROOT; rm -f $ROOT_WAR_LOCATION/ROOT.war"
+          scp -i $TOMCAT_CREDS $LOCAL_WAR_DIR/$WAR_FILE $TOMCAT_CREDS_USR@$TOMCAT_SERVER:$ROOT_WAR_LOCATION/ROOT.war
+          ssh -i $TOMCAT_CREDS $TOMCAT_CREDS_USR@$TOMCAT_SERVER "chown $TOMCAT_CREDS_USR:$TOMCAT_CREDS_USR $ROOT_WAR_LOCATION/ROOT.war"
+          ssh -i $TOMCAT_CREDS $TOMCAT_CREDS_USR@$TOMCAT_SERVER "/home/pi/tools/apache-tomcat-10.1.18/bin/catalina.sh start"
+        '''
       }
-        steps {
-          sh 'mvn test'       
-        }
-      }**/
+    }
 
-    stage('Start container') {
+    /**stage('Start container') {
       steps {
         sh 'COMPOSE_PROFILES=all docker compose up -d --quiet-pull --wait'
         sh 'docker-compose ps'
       }
-    }
+    }**/
   }
 }
