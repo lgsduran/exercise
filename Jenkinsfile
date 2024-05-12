@@ -1,16 +1,17 @@
 pipeline {
-  agent any
+  agent {
+    docker {
+      image 'maven:3.9.3-eclipse-temurin-17'
+      args '-v $HOME/.m2:/root/.m2 -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal'
+    } 
+  }
   environment {
     TOMCAT_CREDS=credentials('pi-ssh-key')
     TOMCAT_SERVER="192.168.1.48"
     ROOT_WAR_LOCATION="/usr/local/tomcat/webapps"
     LOCAL_WAR_DIR="build/dist"
     WAR_FILE="app-0.1.0.war"
-  }
-  docker {
-    image 'maven:3.9.3-eclipse-temurin-17'
-    args '-v $HOME/.m2:/root/.m2 -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal'
-  }            
+  }           
   stages {
     stage('Build') {
           steps {
