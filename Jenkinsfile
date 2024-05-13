@@ -12,13 +12,13 @@ pipeline {
     LOCAL_WAR_DIR="/var/jenkins_home/workspace/exercise/target"
     WAR_FILE="app-0.1.0.war"
   }           
-  stages {
+  /**stages {
     stage('Build') {
           steps {
             sh 'pwd'
-            //sh 'mvn clean package -DskipTests'
+            sh 'mvn clean package -DskipTests'
           }
-    }
+    }**/
     stage('copy the war file to the Tomcat server') {
       steps {
         
