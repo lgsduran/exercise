@@ -18,9 +18,9 @@ pipeline {
     }**/
     stage('copy the war file to the Tomcat server') {
       steps {        
-        sh 'apt-get update -q && apt-get install -qy --no-install-recommends openssh-server sshpass iputils-ping'
+        sh 'apt-get update -q && apt-get install -qy --no-install-recommends openssh-server sshpass iputils-ping net-tools'
         sh 'ls -lha /usr/bin/'
-        sh 'ping -c 5 $TOMCAT_SERVER'     
+        sh 'ifconfig'     
        
       }
     }
