@@ -10,12 +10,11 @@ pipeline {
     TOMCAT_SERVER="172.18.0.3"
   }           
   stages {
-    /**stage('Build') {
+    stage('Build') {
           steps {
-            sh 'pwd'
             sh 'mvn clean package -DskipTests'
           }
-    }**/
+    }
     stage('copy the war file to the Tomcat server') {
       steps {        
         sh 'ls -lha /usr/bin/'
