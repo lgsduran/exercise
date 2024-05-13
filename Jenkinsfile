@@ -12,8 +12,8 @@ pipeline {
     LOCAL_WAR_DIR="/var/jenkins_home/workspace/exercise/target"
     WAR_FILE="app-0.1.0.war"
   }           
-  /**stages {
-    stage('Build') {
+  stages {
+    /**stage('Build') {
           steps {
             sh 'pwd'
             sh 'mvn clean package -DskipTests'
