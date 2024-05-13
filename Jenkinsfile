@@ -15,7 +15,7 @@ pipeline {
   stages {
     stage('Build') {
           steps {
-            sh 'echo pwd'
+            sh 'echo $pwd'
               //sh 'mvn clean package -DskipTests'
           }
     }
