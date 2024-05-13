@@ -6,6 +6,7 @@ pipeline {
     } 
   }
   environment {
+    TOMCAT_CREDS=credentials('pi-ssh-key')
     TOMCAT_SERVER="172.18.0.3"
   }           
   stages {
