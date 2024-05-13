@@ -18,7 +18,7 @@ pipeline {
     stage('copy the war file to the Tomcat server') {
       steps {
         sh 'whoami'
-        sh 'which ssh'
+        sh 'ls -lha /usr/bin/'
       }
     }
 
