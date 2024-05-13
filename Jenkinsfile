@@ -2,7 +2,7 @@ pipeline {
   agent {
     docker {
       image 'maven:3.9.3-eclipse-temurin-17'
-      args '--network mpipeline -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal'
+      args '--network pipeline -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal'
     } 
   }
   environment {
@@ -19,7 +19,7 @@ pipeline {
     stage('copy the war file to the Tomcat server') {
       steps {        
         sh 'ls -lha /usr/bin/'
-        sh 'ifconfig'       
+        sh 'ifconfig'
       }
     }
 
