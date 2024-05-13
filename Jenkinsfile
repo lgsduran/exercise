@@ -18,8 +18,10 @@ pipeline {
     stage('copy the war file to the Tomcat server') {
       steps {
         sh 'whoami'
-        sh 'ls -lha /usr/bin/'
-        sh 'echo $0'
+        sh 'apt-get update -q'
+        sh 'apt-get install -qy --no-install-recommends openssh-server'
+        sh 'ls -lha /usr/bin/'        
+        sh 'ssh ubuntu@$TOMCAT_SERVER "/usr/local/tomcat/bin/catalina.sh stop"'
       }
     }
 
