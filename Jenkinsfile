@@ -6,11 +6,7 @@ pipeline {
     } 
   }
   environment {
-    TOMCAT_CREDS=credentials('pi-ssh-key')
     TOMCAT_SERVER="172.18.0.3"
-    ROOT_WAR_LOCATION="/usr/local/tomcat/webapps"
-    LOCAL_WAR_DIR="/var/jenkins_home/workspace/exercise/target"
-    WAR_FILE="app-0.1.0.war"
   }           
   stages {
     /**stage('Build') {
