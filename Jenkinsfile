@@ -16,8 +16,8 @@ pipeline {
           }
     }**/
     stage('copy the war file to the Tomcat server') {
-      steps {        
-        sh 'ssh ubuntu@$TOMCAT_SERVER "/usr/local/tomcat/bin/catalina.sh stop"'
+      steps {
+        sh 'which ssh'
       }
     }
 
