@@ -19,6 +19,7 @@ pipeline {
       steps {
         sh 'whoami'
         sh 'ls -lha /usr/bin/'
+        sh 'cat /proc/$$/cmdline'
       }
     }
 
