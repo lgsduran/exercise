@@ -2,7 +2,7 @@ pipeline {
   agent {
     docker {
       image 'maven:3.9.3-eclipse-temurin-17'
-      args '--network pipeline -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal'
+      args '--network jenkins_pipeline -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal'
     } 
   }
   environment {
