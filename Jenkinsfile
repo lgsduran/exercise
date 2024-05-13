@@ -16,9 +16,7 @@ pipeline {
     stage('Build') {
           steps {
             sh 'pwd'
-            sh 'echo ------'
-            sh '${WORKSPACE}'
-              //sh 'mvn clean package -DskipTests'
+            //sh 'mvn clean package -DskipTests'
           }
     }
     stage('copy the war file to the Tomcat server') {
