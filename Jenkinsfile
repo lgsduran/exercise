@@ -1,28 +1,32 @@
-node {
-    checkout scm
-    /*
-     * In order to communicate with the MySQL server, this Pipeline explicitly
-     * maps the port (`3306`) to a known port on the host machine.
-     */
-    docker.image('maven:3.9.3-eclipse-temurin-17').withRun('--network jenkins_pipeline'+
-                                           ' -e "TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal"') { c ->
-        stage "Checkout and build deps"
-                sh " apt-get update -q && apt-get install -qy --no-install-recommends openssh-server sshpass iputils-ping net-tools"
-                sh "mvn test"
-    }
-}
-
-node {
-    stage "Prepare environment"
-        checkout scm
-        def environment  = docker.image ('maven:3.9.3-eclipse-temurin-17')
-
-        environment.inside {
-            stage "Checkout and build deps"
-                sh " apt-get update -q && apt-get install -qy --no-install-recommends openssh-server sshpass iputils-ping net-tools"
-                sh "mvn test"
+pipeline {
+    agent none
+    stages {
+        stage('Build deps') {
+            agent {
+                docker {
+                    image 'maven:3.9.3-eclipse-temurin-17'
+                    args '--network jenkins_pipeline -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal apt-get update -q && apt-get install -qy --no-install-recommends openssh-server sshpass iputils-ping net-tools'
+                }
+            }
+            steps {
+                sh 'apt-get update -q && apt-get install -qy --no-install-recommends openssh-server sshpass iputils-ping net-tools'
+            }
         }
-
-    stage "Cleanup"
-        deleteDir()
+        stage('Build') {
+            steps {
+                sh 'mvn clean package -DskipTests'
+            }
+        }
+        stage('copy the war file to the Tomcat server') {
+            environment {
+                TOMCAT_CREDS=credentials('pi-ssh-key2')
+                TOMCAT_SERVER="172.18.0.3"
+            }
+            steps {
+                sh 'ls -lha /usr/bin/'
+                sh 'ifconfig'
+                sh 'sshpass -p $TOMCAT_CREDS_PSW ssh -tt $TOMCAT_CREDS_USR@$TOMCAT_SERVER'
+            }
+        }
+    }
 }
