@@ -1,7 +1,7 @@
 node {
     stage "Prepare environment"
         checkout scm
-        def environment  = docker.image ('maven:3.9.3-eclipse-temurin-17').withRun('-e "TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal"')
+        def environment  = docker.image ('maven:3.9.3-eclipse-temurin-17')
 
         environment.inside {
             stage "Checkout and build deps"
