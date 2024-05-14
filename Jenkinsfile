@@ -1,5 +1,5 @@
 pipeline {
-    agent none
+    agent any
     stages {
         stage('Build deps') {
             agent {
@@ -9,7 +9,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'apt-get update -q && apt-get install -qy --no-install-recommends openssh-server sshpass'
+                sh 'apt-get update -q && apt-get install -qy --no-install-recommends openssh-server sshpass iputils-ping net-tools'
                 sh 'apt-get clean && rm -rf /var/lib/apt'
             }
         }
