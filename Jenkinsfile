@@ -5,11 +5,12 @@ pipeline {
             agent {
                 docker {
                     image 'maven:3.9.3-eclipse-temurin-17'
-                    args '--network jenkins_pipeline -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal apt-get update -q && apt-get install -qy --no-install-recommends openssh-server sshpass iputils-ping net-tools'
+                    args '--network jenkins_pipeline -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal'
                 }
             }
             steps {
                 sh 'apt-get update -q && apt-get install -qy --no-install-recommends openssh-server sshpass iputils-ping net-tools'
+                sh 'apt-get clean && rm -rf /var/lib/apt'
             }
         }
         stage('Build') {
