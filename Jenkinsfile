@@ -8,11 +8,6 @@ pipeline {
                     args '--network jenkins_pipeline -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal'
                 }
             }
-            steps {
-                sh 'apt-get update -q && apt-get install -qy --no-install-recommends openssh-server sshpass iputils-ping net-tools'
-                sh 'apt-get clean && rm -rf /var/lib/apt'
-            }
-
             stages {
                  stage('Build') {
                     steps {
@@ -25,6 +20,8 @@ pipeline {
                         TOMCAT_SERVER="172.18.0.3"
                     }
                     steps {
+                        sh 'apt-get update -q && apt-get install -qy --no-install-recommends openssh-server sshpass iputils-ping net-tools'
+                        sh 'apt-get clean && rm -rf /var/lib/apt'
                         sh 'ls -lha /usr/bin/'
                         sh 'ifconfig'
                         sh 'sshpass -p $TOMCAT_CREDS_PSW ssh -tt $TOMCAT_CREDS_USR@$TOMCAT_SERVER'
