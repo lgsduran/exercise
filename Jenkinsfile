@@ -11,14 +11,15 @@ pipeline {
             stages {
                  stage('Build') {
                     steps {
-                        sh 'mvn clean package -DskipTests'
+                        //sh 'mvn clean package -DskipTests'
+                        sh 'echo test'
                     }
                 }
                 stage('copy the war file to the Tomcat server') {
                     environment {
                         TOMCAT_CREDS=credentials('pi-ssh-key2')
                         TOMCAT_SERVER="172.18.0.2"
-                        ROOT_WAR_LOCATION="/usr/local/tomcat/webapps"
+                        ROOT_WAR_LOCATION="/home/ubuntu"
                     }
                     steps {
                         sh 'apt-get update -q && apt-get install -qy --no-install-recommends openssh-server sshpass iputils-ping net-tools'
