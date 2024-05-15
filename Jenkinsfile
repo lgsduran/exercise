@@ -3,8 +3,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                //sh 'mvn clean package -DskipTests'
-                sh 'echo test'
+                sh 'mvn clean package -DskipTests'                
             }
         }
         stage('copy the war file to the Tomcat server') {
@@ -14,8 +13,9 @@ pipeline {
                 ROOT_WAR_LOCATION="/home/ubuntu"
             }
             steps {
-                sh 'sshpass -p $TOMCAT_CREDS_PSW ssh $TOMCAT_CREDS_USR@$TOMCAT_SERVER "rm -f /home/ubuntu/test.txt"'
-                //sh 'sshpass -p $TOMCAT_CREDS_PSW ssh -tt $TOMCAT_CREDS_USR@$TOMCAT_SERVER'
+                sh 'echo test'
+                //sh 'sshpass -p $TOMCAT_CREDS_PSW ssh $TOMCAT_CREDS_USR@$TOMCAT_SERVER "rm -f /home/ubuntu/test.txt"'
+                //sh 'sshpass -p $TOMCAT_CREDS_PSW scp -tt $TOMCAT_CREDS_USR@$TOMCAT_SERVER'
             }
         }
     }
