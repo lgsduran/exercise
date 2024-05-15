@@ -12,8 +12,8 @@
 	<groupId>fr.fiducial</groupId>
 	<artifactId>exercise</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>exercise</name>
 	<packaging>war</packaging>
+	<name>exercise</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
