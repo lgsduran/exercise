@@ -18,7 +18,7 @@ pipeline {
                     environment {
                         TOMCAT_CREDS=credentials('pi-ssh-key2')
                         TOMCAT_SERVER="172.18.0.3"
-                        $ROOT_WAR_LOCATION="/usr/local/tomcat/webapps"
+                        ROOT_WAR_LOCATION="/usr/local/tomcat/webapps"
                     }
                     steps {
                         sh 'apt-get update -q && apt-get install -qy --no-install-recommends openssh-server sshpass iputils-ping net-tools'
