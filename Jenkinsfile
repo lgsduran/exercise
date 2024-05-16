@@ -9,7 +9,7 @@ pipeline {
         stage('copy the war file to the Tomcat server') {
             environment {
                 TOMCAT_CREDS=credentials('pi-ssh-key2')
-                TOMCAT_SERVER="172.18.0.3"
+                TOMCAT_SERVER="172.18.0.2"
                 ROOT_WAR_LOCATION="/usr/local/tomcat/webapps"
                 WORKSPACE_FOLDER="target"
                 ROOT_WAR_FILE="exercise-3.1.1.war"
