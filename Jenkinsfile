@@ -15,7 +15,7 @@ pipeline {
                 ROOT_WAR_LOCATION="/home/ubuntu"
             }
             steps {
-                sh 'ls -lha /target/'
+                sh 'ls -lha /target'
                 //sh 'sshpass -p $TOMCAT_CREDS_PSW ssh $TOMCAT_CREDS_USR@$TOMCAT_SERVER "rm -f /home/ubuntu/test.txt"'
                 //sh 'sshpass -p $TOMCAT_CREDS_PSW scp -tt $TOMCAT_CREDS_USR@$TOMCAT_SERVER'
             }
