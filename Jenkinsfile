@@ -16,9 +16,9 @@ pipeline {
                 ROOT_WAR_FILE="exercise-0.0.1-SNAPSHOT.war"                
             }
             steps {                
-                sh 'sshpass -p $TOMCAT_CREDS_PSW ssh $TOMCAT_CREDS_USR@$TOMCAT_SERVER "rm -rf $ROOT_WAR_LOCATION/ROOT; rm -f $ROOT_WAR_LOCATION/$ROOT_WAR_FILE"'
+                sh 'sshpass -p $TOMCAT_CREDS_PSW ssh $TOMCAT_CREDS_USR@$TOMCAT_SERVER "sudo rm -rf $ROOT_WAR_LOCATION/ROOT; sudo rm -f $ROOT_WAR_LOCATION/$ROOT_WAR_FILE"'
                 sh 'sshpass -p $TOMCAT_CREDS_PSW scp $WORKSPACE_FOLDER/$ROOT_WAR_FILE $TOMCAT_CREDS_USR@$TOMCAT_SERVER:$ROOT_WAR_LOCATION/ROOT.war'
-                sh 'sshpass -p $TOMCAT_CREDS_PSW scp $WORKSPACE_FOLDER/$ROOT_WAR_FILE $TOMCAT_CREDS_USR@$TOMCAT_SERVER "chown $TOMCAT_CREDS_USR:$TOMCAT_CREDS_USR $ROOT_WAR_LOCATION/ROOT.war"'
+                sh 'sshpass -p $TOMCAT_CREDS_PSW ssh $WORKSPACE_FOLDER/$ROOT_WAR_FILE $TOMCAT_CREDS_USR@$TOMCAT_SERVER "chown $TOMCAT_CREDS_USR:$TOMCAT_CREDS_USR $ROOT_WAR_LOCATION/ROOT.war"'
             }
         }
     }
