@@ -4,8 +4,6 @@ pipeline {
         stage('Build') {
             steps {
                 //sh 'mvn clean package -DskipTests'
-                sh 'pwd'
-                sh '$WORKSPACE'
                 sh 'whoami'        
             }
         }
