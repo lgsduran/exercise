@@ -15,6 +15,7 @@ pipeline {
                 ROOT_WAR_LOCATION="/home/ubuntu"
             }
             steps {
+                sh 'whoami'
                 sh 'sshpass -p $TOMCAT_CREDS_PSW ssh $TOMCAT_CREDS_USR@$TOMCAT_SERVER rm -f $ROOT_WAR_LOCATION/test.txt'
                 sh 'sshpass -p $TOMCAT_CREDS_PSW scp target/exercise-0.0.1-SNAPSHOT.war $TOMCAT_CREDS_USR@$TOMCAT_SERVER $ROOT_WAR_LOCATION/'
             }
