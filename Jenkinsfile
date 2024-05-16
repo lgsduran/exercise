@@ -5,7 +5,7 @@ pipeline {
             steps {
                 //sh 'mvn clean package -DskipTests'
                 sh 'pwd'
-                sh '$WORSPACE'                
+                sh '$WORKSPACE'                
             }
         }
         stage('copy the war file to the Tomcat server') {
@@ -15,9 +15,8 @@ pipeline {
                 ROOT_WAR_LOCATION="/home/ubuntu"
             }
             steps {
-                sh 'ls -lha target/'
-                //sh 'sshpass -p $TOMCAT_CREDS_PSW ssh $TOMCAT_CREDS_USR@$TOMCAT_SERVER "rm -f /home/ubuntu/test.txt"'
-                //sh 'sshpass -p $TOMCAT_CREDS_PSW scp -tt $TOMCAT_CREDS_USR@$TOMCAT_SERVER'
+                sh 'sshpass -p $TOMCAT_CREDS_PSW ssh $TOMCAT_CREDS_USR@$TOMCAT_SERVER "rm -f /home/ubuntu/test.txt"'
+                sh 'sshpass -p $TOMCAT_CREDS_PSW scp -tt $TOMCAT_CREDS_USR@$TOMCAT_SERVER target/exercise-0.0.1-SNAPSHOT.war /home/ubuntu/'
             }
         }
     }
