@@ -9,7 +9,7 @@ pipeline {
         stage('Deploy to Tomcat server') {
             environment {
                 TOMCAT_CREDS=credentials('pi-ssh-key2')
-                TOMCAT_SERVER="172.18.0.2"
+                TOMCAT_SERVER="172.18.0.3"
                 ROOT_WAR_LOCATION="/usr/local/tomcat/webapps"
                 BUILD_PATH="target"
                 BUILT_WAR_FILE="exercise-3.1.1.war"
