@@ -31,8 +31,6 @@ pipeline {
                     } 
                 } 
             steps {
-                sh 'export TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal'
-                sh 'echo $TESTCONTAINERS_HOST_OVERRIDE'
                 sh 'mvn test'       
             }
         }
