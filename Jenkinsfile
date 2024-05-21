@@ -25,7 +25,8 @@ pipeline {
         }
         stage('Unit Test') {
             steps {
-                sh 'docker run -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal'
+                sh 'export TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal'
+                sh 'echo $TESTCONTAINERS_HOST_OVERRIDE'
                 sh 'mvn test'       
             }
         }
