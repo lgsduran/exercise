@@ -35,7 +35,7 @@ pipeline {
                 sh 'mvn test'       
             }
         }
-        stage('API Test) {
+        stage('API Test') {
             agent { docker { image 'node:22.2.0-alpine3.18' } }
             environment {
                 HOSTNAME="http://172.18.0.2"
