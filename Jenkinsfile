@@ -44,14 +44,14 @@ pipeline {
             // }
             environment {
                 FOLDER="/var/jenkins_home/workspace/exercise/postman"
-                HOSTNAME="http://172.18.0.2"
+                HOSTNAME="http://172.18.0.5"
                 PORT="8087"
                 APP= "exercise-3.1.1"
             }
             steps {
                 sh 'apt update && apt install npm nodejs -y'
                 sh 'npm install -g newman && npm install -g newman-reporter-html'
-                sh 'newman run $FOLDER/Tests.postman_collection.json -e $FOLDER/workspace.postman_globals.json --global-var "baseUrl=$HOSTNAME:$PORT/$APP/" --disable-unicode'
+                sh 'newman run $FOLDER/Tests.postman_collection.json -e $FOLDER/workspace.postman_globals.json --env-var "baseUrl=$HOSTNAME:$PORT/$APP/" --disable-unicode'
                 publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'var/reports/newman/html', reportFiles: 'index.html', reportName: 'Newman API Test', reportTitles: ''])
             }       
         }   
