@@ -36,7 +36,12 @@ pipeline {
             }
         }
         stage('API Test') {
-            agent { docker { image 'node:latest' } }
+            agent { 
+                docker { 
+                    image 'node:latest'
+                    args '--network jenkins_pipeline -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal'
+                }
+            }
             environment {
                 FOLDER="/var/jenkins_home/workspace/exercise/postman"
                 HOSTNAME="http://172.18.0.2"
