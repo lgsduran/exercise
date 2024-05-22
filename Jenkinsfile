@@ -25,20 +25,18 @@ pipeline {
             }
         }
         stage('Unit Test') {
-            agent {   
+            agent {
                 docker {
-                        image 'maven:3.9.3-eclipse-temurin-17'
-                        args '--network jenkins_pipeline -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal'
-                    } 
+                    image 'maven:3.9.3-eclipse-temurin-17'
+                    args '--network jenkins_pipeline -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal'
                 } 
+            }
             steps {
                 sh 'mvn test'       
             }
         }
         stage('API Test) {
-            agent {
-                docker { image 'node:22.2.0-alpine3.18' }
-            }
+            agent { docker { image 'node:22.2.0-alpine3.18' } }
             environment {
                 HOSTNAME="http://172.18.0.2"
                 PORT="8087"
