@@ -36,12 +36,12 @@ pipeline {
             }
         }
         stage('API Test') {
-            agent { 
-                docker { 
-                    image 'node:latest'
-                    args '--network jenkins_pipeline -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal'
-                }
-            }
+            // agent { 
+            //     docker { 
+            //         image 'node:latest'
+            //         args '--network jenkins_pipeline -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal'
+            //     }
+            // }
             environment {
                 FOLDER="/var/jenkins_home/workspace/exercise/postman"
                 HOSTNAME="http://172.18.0.2"
@@ -49,6 +49,7 @@ pipeline {
                 APP= "exercise-3.1.1"
             }
             steps {
+                sh 'apt update && apt install npm nodejs -y'
                 sh 'npm install -g newman && npm install -g newman-reporter-html'
                 sh 'newman run $FOLDER/Tests.postman_collection.json -e $FOLDER/workspace.postman_globals.json --folder "postman" --global-var "baseUrl=$HOSTNAME:$PORT/$APP/" --disable-unicode -r junit,html --reporter-junit-export var/reports/newman/junit/newman.xml --reporter-html-export var/reports/newman/html/index.html'
                 publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'var/reports/newman/html', reportFiles: 'index.html', reportName: 'Newman API Test', reportTitles: ''])
