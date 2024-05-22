@@ -38,7 +38,7 @@ pipeline {
         stage('API Test') {
             agent { docker { image 'node:22.2.0-alpine3.18' } }
             environment {
-                FOLDER="/postman"
+                FOLDER="/var/jenkins_home/workspace/exercise/postman"
                 HOSTNAME="http://172.18.0.2"
                 PORT="8087"
                 APP= "exercise-3.1.1"
