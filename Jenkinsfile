@@ -38,13 +38,14 @@ pipeline {
         stage('API Test') {
             agent { docker { image 'node:22.2.0-alpine3.18' } }
             environment {
+                FOLDER="/postman"
                 HOSTNAME="http://172.18.0.2"
                 PORT="8087"
                 APP= "exercise-3.1.1"
             }
             steps {
                 sh 'npm install -g newman && npm install -g newman-reporter-html'
-                sh 'newman run Tests.postman_collection.json -e workspace.postman_globals.json --folder "postman" --global-var "baseUrl=$HOSTNAME:$PORT/$APP/" --disable-unicode -r junit,html --reporter-junit-export var/reports/newman/junit/newman.xml --reporter-html-export var/reports/newman/html/index.html'
+                sh 'newman run $FOLDER/Tests.postman_collection.json -e $FOLDER/workspace.postman_globals.json --folder "postman" --global-var "baseUrl=$HOSTNAME:$PORT/$APP/" --disable-unicode -r junit,html --reporter-junit-export var/reports/newman/junit/newman.xml --reporter-html-export var/reports/newman/html/index.html'
                 publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'var/reports/newman/html', reportFiles: 'index.html', reportName: 'Newman API Test', reportTitles: ''])
             }       
         }   
