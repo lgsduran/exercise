@@ -52,9 +52,13 @@ pipeline {
             steps {
                 sh 'apt update && apt install npm nodejs -y'
                 sh 'npm install -g newman && npm install -g newman-reporter-html'
-                sh 'newman run $FOLDER/Tests.postman_collection.json -g $FOLDER/workspace.postman_globals.json --env-var "baseUrl=$TOMCAT_SERVER:$PORT/$APP" --disable-unicode'
-                publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'var/reports/newman/html', reportFiles: 'index.html', reportName: 'Newman API Test', reportTitles: ''])
+                sh 'newman run $FOLDER/Tests.postman_collection.json -g $FOLDER/workspace.postman_globals.json --env-var "baseUrl=$TOMCAT_SERVER:$PORT/$APP" --disable-unicode -r htmlextra --reporter-htmlextra-export report.html --reporter-htmlextra-title "API Test Report"'                
             }       
         }   
+    }
+post { 
+        always { 
+            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'var/reports/newman/html', reportFiles: 'index.html', reportName: 'Newman API Test', reportTitles: ''])
+        }
     }
 }
