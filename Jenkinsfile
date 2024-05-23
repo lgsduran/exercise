@@ -3,7 +3,7 @@ pipeline {
     options { ansiColor('xterm') }
     environment {
                 TOMCAT_SERVER="172.18.0.4"
-                PORT="8088"
+                PORT="8090"
             }
     stages {
         stage('Build') {
