@@ -52,7 +52,7 @@ pipeline {
             steps {
                 sh 'apt update && apt install npm nodejs -y'
                 sh 'npm install -g newman && npm install -g newman-reporter-html && npm install -g newman-reporter-openapi && npm install -g newman-reporter-postman-cloud && npm install -g newman-reporter-xunit'
-                sh 'newman run $FOLDER/Tests.postman_collection.json -g $FOLDER/workspace.postman_globals.json --env-var "baseUrl=$TOMCAT_SERVER:$PORT/$APP" --disable-unicode --no-color ----reporters cli,html,junit --report-junit-export "target/pipelineReport.xml"--reporter-html-export "target/pipelineReport.html"'                
+                sh 'newman run $FOLDER/Tests.postman_collection.json -g $FOLDER/workspace.postman_globals.json --env-var "baseUrl=$TOMCAT_SERVER:$PORT/$APP" --disable-unicode --no-color --reporters cli,html,junit --report-junit-export "target/pipelineReport.xml"--reporter-html-export "target/pipelineReport.html"'                
             }       
         }   
     }
