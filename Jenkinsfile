@@ -51,14 +51,17 @@ pipeline {
             }
             steps {
                 sh 'apt update && apt install npm nodejs -y'
-                sh 'npm install -g newman newman-reporter-html newman-reporter-htmlextra'
-                sh 'newman run $FOLDER/Tests.postman_collection.json -g $FOLDER/workspace.postman_globals.json --env-var "baseUrl=$TOMCAT_SERVER:$PORT/$APP" --disable-unicode -r htmlextra --reporter-htmlextra-export report.html --reporter-htmlextra-title "API Test Report"'                
+                sh 'npm install -g newman && npm install -g newman-reporter-html && npm install -g newman-reporter-openapi && npm install -g newman-reporter-postman-cloud && npm install -g newman-reporter-xunit'
+                sh 'newman run $FOLDER/Tests.postman_collection.json -g $FOLDER/workspace.postman_globals.json --env-var "baseUrl=$TOMCAT_SERVER:$PORT/$APP" --disable-unicode --reporters cli,html,openapi,postman-cloud,xunit --reporter-html-export target/pipelineReport.html --reporter-openapi-spec postman/schemas/index.yaml --reporter-postman-cloud-apiKey "${POSTMAN_API_KEY}" --reporter-postman-cloud-workspaceId ${WORKSPACE_ID} --reporter-integrationIdentifier "${WORKSPACE_ID}-${JOB_NAME}${BUILD_NUMBER}"'                
             }       
         }   
     }
 post { 
         always { 
-            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'var/reports/newman/html', reportFiles: 'index.html', reportName: 'Newman API Test', reportTitles: ''])
+            //publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'var/reports/newman/html', reportFiles: 'index.html', reportName: 'Newman API Test', reportTitles: ''])
+            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'target', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: ''])
+            // publish junit test results
+            junit 'newman/*.xml'
         }
     }
 }
